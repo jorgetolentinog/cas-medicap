@@ -1,0 +1,38 @@
+service: cas-medicap
+useDotenv: true
+
+provider:
+  name: aws
+
+resources:
+  Resources:
+    ApiGateway:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        Name: ${self:service}-${sls:stage}
+
+    EventBus:
+      Type: AWS::Events::EventBus
+      Properties:
+        Name: ${self:service}-${sls:stage}
+
+  Outputs:
+    ApiGatewayRestApiId:
+      Value:
+        Ref: ApiGateway
+      Export:
+        Name: ${self:service}-${sls:stage}-ApiGatewayRestApiId
+
+    ApiGatewayRestApiRootResourceId:
+      Value:
+        Fn::GetAtt:
+          - ApiGateway
+          - RootResourceId
+      Export:
+        Name: ${self:service}-${sls:stage}-ApiGatewayRestApiRootResourceId
+
+    EventBusName:
+      Value:
+        Ref: EventBus
+      Export:
+        Name: ${self:service}-${sls:stage}-EventBusName

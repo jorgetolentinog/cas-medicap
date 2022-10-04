@@ -1,0 +1,98 @@
+service: cas-backend-medicap-sync
+useDotenv: true
+
+plugins:
+  - serverless-plugin-typescript
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  environment:
+    EVENT_BUS_NAME: ${self:service}-${sls:stage}
+    DYNAMODB_TABLE_CALENDAR: ${self:service}-${sls:stage}-calendar
+    DYNAMODB_TABLE_EXCEPTION: ${self:service}-${sls:stage}-exception
+    DYNAMODB_TABLE_RELEASE: ${self:service}-${sls:stage}-release
+    DYNAMODB_TABLE_BOOKING: ${self:service}-${sls:stage}-booking
+    DYNAMODB_TABLE_PRE_BOOKING: ${self:service}-${sls:stage}-pre-booking
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: /sync
+          method: get
+
+resources:
+  Resources:
+    EventBus:
+      Type: AWS::Events::EventBus
+      Properties:
+        Name: ${self:provider.environment.EVENT_BUS_NAME}
+
+    CalendarTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.DYNAMODB_TABLE_CALENDAR}
+
+    ExceptionTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.DYNAMODB_TABLE_EXCEPTION}
+
+    ReleaseTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.DYNAMODB_TABLE_RELEASE}
+
+    BookingTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.DYNAMODB_TABLE_BOOKING}
+
+    PreBookingTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.DYNAMODB_TABLE_PRE_BOOKING}
+
+  Outputs:
+    EventBusName:
+      Value:
+        Ref: EventBus
+      Export:
+        Name: ${self:service}-${sls:stage}-EventBusName
