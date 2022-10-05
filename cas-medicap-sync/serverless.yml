@@ -22,15 +22,15 @@ provider:
 custom:
   cas-medicap:
     ApiGatewayRestApiId:
-      'Fn::ImportValue': cas-medicap-${sls:stage}-ApiGatewayRestApiId
+      "Fn::ImportValue": cas-medicap-${sls:stage}-ApiGatewayRestApiId
     ApiGatewayRestApiRootResourceId:
-      'Fn::ImportValue': cas-medicap-${sls:stage}-ApiGatewayRestApiRootResourceId
+      "Fn::ImportValue": cas-medicap-${sls:stage}-ApiGatewayRestApiRootResourceId
     EventBusName:
-      'Fn::ImportValue': cas-medicap-${sls:stage}-EventBusName
+      "Fn::ImportValue": cas-medicap-${sls:stage}-EventBusName
 
 functions:
   httpSyncPost:
-    handler: ./src/function/http/sync/sync-post.handler
+    handler: ./src/function/http/sync-post.handler
     events:
       - http:
           path: /sync
