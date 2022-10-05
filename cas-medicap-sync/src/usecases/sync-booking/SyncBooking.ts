@@ -1,12 +1,17 @@
+import { inject, injectable } from "tsyringe";
 import { Booking } from "../../models/Booking";
-import { BookingRepository } from "../../ports/repositories/BookingRepository";
+import { BookingRepository } from "../../ports/database/BookingRepository";
 import { SyncBookingCommand } from "./SyncBookingCommand";
 
+@injectable()
 export class SyncBooking {
-  constructor(private bookingRepository: BookingRepository) {}
+  constructor(
+    @inject("BookingRepository")
+    private bookingRepository: BookingRepository
+  ) {}
 
   async execute(command: SyncBookingCommand) {
-    console.log(command)
+    console.log(command);
     let booking = await this.bookingRepository.findById(command.id);
 
     if (booking != null) {

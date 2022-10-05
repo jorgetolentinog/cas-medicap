@@ -2,17 +2,18 @@
   "name": "cas-medicap-sync",
   "version": "1.0.0",
   "scripts": {
-    "start": "npx serverless offline start --verbose",
+    "start": "npx serverless offline start",
     "deploy": "npx serverless deploy"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.183.0",
     "aws-sdk": "^2.1230.0",
     "dayjs": "^1.11.5",
+    "reflect-metadata": "^0.1.13",
     "tsyringe": "^4.7.0",
     "zod": "^3.19.1"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.106",
     "esbuild": "^0.15.10",
     "serverless": "^3.22.0",
     "serverless-esbuild": "^1.33.0",

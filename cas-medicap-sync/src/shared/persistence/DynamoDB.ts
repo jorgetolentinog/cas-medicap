@@ -1,5 +1,7 @@
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class DynamoDB {
   readonly client: DocumentClient;
   constructor() {

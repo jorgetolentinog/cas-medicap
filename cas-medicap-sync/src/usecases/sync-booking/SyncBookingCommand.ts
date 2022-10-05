@@ -14,8 +14,6 @@ export class SyncBookingCommand {
   isEnabled: boolean;
 
   constructor(request: unknown) {
-    console.log('SyncBookingCommand', request);
-
     const result = this.parse(request);
 
     if (!result.success) {

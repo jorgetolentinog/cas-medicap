@@ -1,5 +1,5 @@
 import { Booking } from "../../models/Booking";
-import { BookingRepository } from "../../ports/repositories/BookingRepository";
+import { BookingRepository } from "../../ports/database/BookingRepository";
 import { DynamoDB } from "../../shared/persistence/DynamoDB";
 import { injectable } from "tsyringe";
 
