@@ -2,7 +2,7 @@ service: cas-medicap-sync
 useDotenv: true
 
 plugins:
-  - serverless-esbuild
+  - serverless-webpack
   - serverless-offline
 
 provider:
