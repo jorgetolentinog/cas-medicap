@@ -1,11 +1,13 @@
 {
   "name": "cas-medicap-sync",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "deploy": "npx serverless deploy"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.183.0",
+    "dayjs": "^1.11.5",
     "zod": "^3.19.1"
   },
   "devDependencies": {

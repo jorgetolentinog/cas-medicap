@@ -3,9 +3,12 @@
     "sourceMap": true,
     "allowJs": true,
     "strict": true,
-    "target": "es2019",
+    "target": "ES2021",
+    "lib": ["ES2021"],
     "outDir": ".build",
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "rootDir": "./"
-  }
+  },
+  "exclude": ["node_modules"]
 }

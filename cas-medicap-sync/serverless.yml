@@ -28,11 +28,11 @@ custom:
       'Fn::ImportValue': cas-medicap-${sls:stage}-EventBusName
 
 functions:
-  receiver:
-    handler: ./src/handler.hello
+  sync:
+    handler: ./src/infrastructure/functions/sync.handler
     events:
       - http:
-          path: /sync/receiver
+          path: /sync
           method: get
 
 resources:
