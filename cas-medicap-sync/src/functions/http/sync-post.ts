@@ -2,7 +2,7 @@ import "reflect-metadata";
 
 import { APIGatewayEvent } from "aws-lambda";
 import { container } from "tsyringe";
-import { SyncPostController } from "../../controllers/SyncPostController";
+import { SyncPostController } from "./controller/SyncPostController";
 
 export const handler = async (event: APIGatewayEvent) => {
   await container.resolve(SyncPostController).execute(event);
