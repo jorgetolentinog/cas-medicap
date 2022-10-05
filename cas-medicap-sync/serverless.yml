@@ -1,4 +1,4 @@
-service: cas-backend-medicap-sync
+service: cas-medicap-sync
 useDotenv: true
 
 plugins:
@@ -8,12 +8,24 @@ provider:
   name: aws
   runtime: nodejs16.x
   environment:
-    EVENT_BUS_NAME: ${self:service}-${sls:stage}
+    EVENT_BUS_NAME: ${self:custom.cas-medicap.EventBusName}
     DYNAMODB_TABLE_CALENDAR: ${self:service}-${sls:stage}-calendar
     DYNAMODB_TABLE_EXCEPTION: ${self:service}-${sls:stage}-exception
     DYNAMODB_TABLE_RELEASE: ${self:service}-${sls:stage}-release
     DYNAMODB_TABLE_BOOKING: ${self:service}-${sls:stage}-booking
     DYNAMODB_TABLE_PRE_BOOKING: ${self:service}-${sls:stage}-pre-booking
+  apiGateway:
+    restApiId: ${self:custom.cas-medicap.ApiGatewayRestApiId}
+    restApiRootResourceId: ${self:custom.cas-medicap.ApiGatewayRestApiRootResourceId}
+
+custom:
+  cas-medicap:
+    ApiGatewayRestApiId:
+      'Fn::ImportValue': cas-medicap-${sls:stage}-ApiGatewayRestApiId
+    ApiGatewayRestApiRootResourceId:
+      'Fn::ImportValue': cas-medicap-${sls:stage}-ApiGatewayRestApiRootResourceId
+    EventBusName:
+      'Fn::ImportValue': cas-backend-agd-tlmdcn-${sls:stage}-EventBusName
 
 functions:
   hello:
@@ -25,11 +37,6 @@ functions:
 
 resources:
   Resources:
-    EventBus:
-      Type: AWS::Events::EventBus
-      Properties:
-        Name: ${self:provider.environment.EVENT_BUS_NAME}
-
     CalendarTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -89,10 +96,3 @@ resources:
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.DYNAMODB_TABLE_PRE_BOOKING}
-
-  Outputs:
-    EventBusName:
-      Value:
-        Ref: EventBus
-      Export:
-        Name: ${self:service}-${sls:stage}-EventBusName
