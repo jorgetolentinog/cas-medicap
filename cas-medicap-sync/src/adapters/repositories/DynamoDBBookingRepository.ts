@@ -1,7 +1,9 @@
-import { Booking } from "../../../core/models/Booking";
-import { BookingRepository } from "../../../core/ports/repositories/BookingRepository";
-import { DynamoDB } from "../../persistence/DynamoDB";
+import { Booking } from "../../models/Booking";
+import { BookingRepository } from "../../ports/repositories/BookingRepository";
+import { DynamoDB } from "../../shared/persistence/DynamoDB";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class DynamoDBBookingRepository implements BookingRepository {
   private _table = process.env.DYNAMODB_TABLE_BOOKING ?? "BookingTable";
 

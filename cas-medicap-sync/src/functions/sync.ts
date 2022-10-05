@@ -1,4 +1,3 @@
-import { SyncBookingCommand } from "../../core/usecases/sync-booking/SyncBookingCommand";
 // import { syncBooking } from "../injection";
 
 export const handler = async () => {
