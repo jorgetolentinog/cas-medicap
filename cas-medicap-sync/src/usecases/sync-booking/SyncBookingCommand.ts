@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { localDate } from "../../shared/date";
+import { localDate } from "../../service/date";
 
 export class SyncBookingCommand {
   id: string;
