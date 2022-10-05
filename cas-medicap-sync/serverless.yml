@@ -2,7 +2,8 @@ service: cas-medicap-sync
 useDotenv: true
 
 plugins:
-  - serverless-plugin-typescript
+  - serverless-esbuild
+  - serverless-offline
 
 provider:
   name: aws

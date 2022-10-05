@@ -6,6 +6,7 @@ export class SyncBooking {
   constructor(private bookingRepository: BookingRepository) {}
 
   async execute(command: SyncBookingCommand) {
+    console.log(command)
     let booking = await this.bookingRepository.findById(command.id);
 
     if (booking != null) {
