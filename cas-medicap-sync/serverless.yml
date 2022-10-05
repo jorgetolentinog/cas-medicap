@@ -25,11 +25,11 @@ custom:
     ApiGatewayRestApiRootResourceId:
       'Fn::ImportValue': cas-medicap-${sls:stage}-ApiGatewayRestApiRootResourceId
     EventBusName:
-      'Fn::ImportValue': cas-backend-agd-tlmdcn-${sls:stage}-EventBusName
+      'Fn::ImportValue': cas-medicap-${sls:stage}-EventBusName
 
 functions:
   hello:
-    handler: handler.hello
+    handler: ./src/handler.hello
     events:
       - http:
           path: /sync
