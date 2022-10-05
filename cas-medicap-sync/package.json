@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.183.0",
+    "aws-sdk": "^2.1230.0",
     "dayjs": "^1.11.5",
     "tsyringe": "^4.7.0",
     "zod": "^3.19.1"

@@ -10,16 +10,18 @@ export class DynamoDBBookingRepository implements BookingRepository {
   constructor(private dynamodb: DynamoDB) {}
 
   async findById(bookingId: string) {
-    const result = await this.dynamodb.client.query({
-      TableName: this._table,
-      KeyConditionExpression: "#id = :id",
-      ExpressionAttributeNames: { "#id": "id" },
-      ExpressionAttributeValues: {
-        ":id": {
-          S: bookingId,
+    const result = await this.dynamodb.client
+      .query({
+        TableName: this._table,
+        KeyConditionExpression: "#id = :id",
+        ExpressionAttributeNames: { "#id": "id" },
+        ExpressionAttributeValues: {
+          ":id": {
+            S: bookingId,
+          },
         },
-      },
-    });
+      })
+      .promise();
 
     const item = result.Items && result.Items[0];
     if (item == null) {
@@ -27,18 +29,18 @@ export class DynamoDBBookingRepository implements BookingRepository {
     }
 
     return new Booking({
-      id: item.id.S!,
-      date: item.date.S!,
-      companyId: item.companyId.S!,
-      officeId: item.officeId.S!,
-      serviceId: item.serviceId.S!,
-      professionalId: item.professionalId.S!,
-      patientId: item.patientId.S!,
-      calendarId: item.calendarId.S!,
-      isEnabled: item.isEnabled.BOOL!,
-      blockDurationInMinutes: Number(item.blockDurationInMinutes.N),
-      createdAt: item.createdAt.S!,
-      updatedAt: item.updatedAt.S!,
+      id: item.id,
+      date: item.date,
+      companyId: item.companyId,
+      officeId: item.officeId,
+      serviceId: item.serviceId,
+      professionalId: item.professionalId,
+      patientId: item.patientId,
+      calendarId: item.calendarId,
+      isEnabled: item.isEnabled,
+      blockDurationInMinutes: item.blockDurationInMinutes,
+      createdAt: item.createdAt,
+      updatedAt: item.updatedAt,
     });
   }
 

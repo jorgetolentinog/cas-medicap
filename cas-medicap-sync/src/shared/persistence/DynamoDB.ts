@@ -1,11 +1,9 @@
-import { DynamoDB as DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { injectable } from "tsyringe";
+import { DocumentClient } from "aws-sdk/clients/dynamodb";
 
-@injectable()
 export class DynamoDB {
-  readonly client: DynamoDBClient;
+  readonly client: DocumentClient;
   constructor() {
-    this.client = new DynamoDBClient(this.getOptions());
+    this.client = new DocumentClient(this.getOptions());
   }
 
   private getOptions() {
