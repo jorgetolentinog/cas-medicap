@@ -16,9 +16,7 @@ export class DynamoDBBookingRepository implements BookingRepository {
         KeyConditionExpression: "#id = :id",
         ExpressionAttributeNames: { "#id": "id" },
         ExpressionAttributeValues: {
-          ":id": {
-            S: bookingId,
-          },
+          ":id": bookingId,
         },
       })
       .promise();
@@ -44,7 +42,67 @@ export class DynamoDBBookingRepository implements BookingRepository {
     });
   }
 
-  async create(booking: Booking) {}
+  async create(booking: Booking) {
+    await this.dynamodb.client
+      .put({
+        TableName: this._table,
+        Item: {
+          id: booking.id,
+          date: booking.date,
+          companyId: booking.companyId,
+          officeId: booking.officeId,
+          serviceId: booking.serviceId,
+          professionalId: booking.professionalId,
+          patientId: booking.patientId,
+          calendarId: booking.calendarId,
+          isEnabled: booking.isEnabled,
+          blockDurationInMinutes: booking.blockDurationInMinutes,
+          createdAt: booking.createdAt,
+          updatedAt: booking.updatedAt,
+        },
+        ConditionExpression: "attribute_not_exists(id)",
+      })
+      .promise();
+  }
 
-  async update(booking: Booking) {}
+  async update(booking: Booking) {
+    const item = {
+      date: booking.date,
+      companyId: booking.companyId,
+      officeId: booking.officeId,
+      serviceId: booking.serviceId,
+      professionalId: booking.professionalId,
+      patientId: booking.patientId,
+      calendarId: booking.calendarId,
+      isEnabled: booking.isEnabled,
+      blockDurationInMinutes: booking.blockDurationInMinutes,
+      createdAt: booking.createdAt,
+      updatedAt: booking.updatedAt,
+    };
+
+    let updateExpression = "set ";
+    const expressionAttributeNames: Record<string, string> = {};
+    const expressionAttributeValues: Record<string, unknown> = {};
+    for (const prop in item) {
+      updateExpression += ` #${prop} = :${prop},`;
+      expressionAttributeNames[`#${prop}`] = prop;
+      expressionAttributeValues[`:${prop}`] = (item as Record<string, unknown>)[
+        prop
+      ];
+    }
+    updateExpression = updateExpression.slice(0, -1);
+
+    await this.dynamodb.client
+      .update({
+        TableName: this._table,
+        Key: {
+          id: booking.id,
+        },
+        UpdateExpression: updateExpression,
+        ConditionExpression: "attribute_exists(id) and #updatedAt < :updatedAt",
+        ExpressionAttributeNames: expressionAttributeNames,
+        ExpressionAttributeValues: expressionAttributeValues,
+      })
+      .promise();
+  }
 }
