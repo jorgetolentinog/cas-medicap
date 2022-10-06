@@ -1,4 +1,4 @@
-import { Booking } from "../../models/Booking";
+import { Booking } from "../../../domain/models/Booking";
 
 export interface BookingRepository {
   create(booking: Booking): Promise<void>;

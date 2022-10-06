@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { httpHandler } from "./shared/http-handler";
+import { httpHandler } from "../handler";
 
 export const handler = httpHandler(async (event) => {
   const body = bodyParser(event.body ?? "");
