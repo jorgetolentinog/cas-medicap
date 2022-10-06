@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { controller } from "../controller";
+import { controller } from "./shared/controller";
 
 export const handler = controller(async (event) => {
   const body = bodyParser(event.body ?? "");

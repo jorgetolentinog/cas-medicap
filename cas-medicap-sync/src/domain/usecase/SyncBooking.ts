@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { Booking } from "../../../domain/models/Booking";
-import { BookingRepository } from "../../ports/database/BookingRepository";
-import { SyncBookingCommand } from "./SyncBookingCommand";
+import { BookingRepository } from "../ports/database/BookingRepository";
+import { SyncBookingCommand } from "../../application/http/usecase/sync-booking/SyncBookingCommand";
 
 @injectable()
 export class SyncBooking {
