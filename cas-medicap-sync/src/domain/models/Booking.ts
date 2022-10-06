@@ -1,16 +1,16 @@
 export class Booking {
-  private id: string;
-  private date: string;
-  private companyId: string;
-  private officeId: string;
-  private serviceId: string;
-  private professionalId: string;
-  private patientId: string;
-  private calendarId: string;
-  private blockDurationInMinutes: number;
-  private isEnabled: boolean;
-  private createdAt: string;
-  private updatedAt: string;
+  id: string;
+  date: string;
+  companyId: string;
+  officeId: string;
+  serviceId: string;
+  professionalId: string;
+  patientId: string;
+  calendarId: string;
+  blockDurationInMinutes: number;
+  isEnabled: boolean;
+  createdAt: string;
+  updatedAt: string;
 
   constructor(props: {
     id: string;
