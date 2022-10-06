@@ -30,7 +30,7 @@ custom:
 
 functions:
   httpSyncPost:
-    handler: ./src/function/http/sync-post.handler
+    handler: ./src/function/http/sync/sync-post-controller.handler
     events:
       - http:
           path: /sync
