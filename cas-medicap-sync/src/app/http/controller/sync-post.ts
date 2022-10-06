@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { httpHandler } from "../handler";
+import { wrapper } from "../wrapper";
 
-export const handler = httpHandler(async (event) => {
+export const handler = wrapper(async (event) => {
   const body = bodyParser(event.body ?? "");
 
   if (!body.success) {
