@@ -1,4 +1,4 @@
-export interface SyncBookingCommand {
+export interface SyncBookingRequest {
   id: string;
   companyId: string;
   officeId: string;

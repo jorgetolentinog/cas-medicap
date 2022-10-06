@@ -1,38 +1,38 @@
 import { BookingRepository } from "../../repository/BookingRepository";
-import { SyncBookingCommand } from "./SyncBookingCommand";
+import { SyncBookingRequest } from "./SyncBookingRequest";
 
 export class SyncBooking {
   constructor(private bookingRepository: BookingRepository) {}
 
-  async execute(command: SyncBookingCommand): Promise<void> {
-    let booking = await this.bookingRepository.findById(command.id);
+  async execute(request: SyncBookingRequest): Promise<void> {
+    let booking = await this.bookingRepository.findById(request.id);
 
     if (booking == null) {
       booking = {
-        id: command.id,
-        date: command.date,
-        companyId: command.companyId,
-        officeId: command.officeId,
-        serviceId: command.serviceId,
-        professionalId: command.professionalId,
-        patientId: command.patientId,
-        calendarId: command.calendarId,
-        blockDurationInMinutes: command.blockDurationInMinutes,
-        isEnabled: command.isEnabled,
+        id: request.id,
+        date: request.date,
+        companyId: request.companyId,
+        officeId: request.officeId,
+        serviceId: request.serviceId,
+        professionalId: request.professionalId,
+        patientId: request.patientId,
+        calendarId: request.calendarId,
+        blockDurationInMinutes: request.blockDurationInMinutes,
+        isEnabled: request.isEnabled,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
       await this.bookingRepository.create(booking);
     } else {
-      booking.date = command.date;
-      booking.companyId = command.companyId;
-      booking.officeId = command.officeId;
-      booking.serviceId = command.serviceId;
-      booking.professionalId = command.professionalId;
-      booking.patientId = command.patientId;
-      booking.calendarId = command.calendarId;
-      booking.blockDurationInMinutes = command.blockDurationInMinutes;
-      booking.isEnabled = command.isEnabled;
+      booking.date = request.date;
+      booking.companyId = request.companyId;
+      booking.officeId = request.officeId;
+      booking.serviceId = request.serviceId;
+      booking.professionalId = request.professionalId;
+      booking.patientId = request.patientId;
+      booking.calendarId = request.calendarId;
+      booking.blockDurationInMinutes = request.blockDurationInMinutes;
+      booking.isEnabled = request.isEnabled;
       booking.updatedAt = new Date().toISOString();
       await this.bookingRepository.update(booking);
     }
