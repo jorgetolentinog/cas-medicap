@@ -3,6 +3,18 @@ useDotenv: true
 
 provider:
   name: aws
+  runtime: nodejs16.x
+
+functions:
+  eventSnoop:
+    handler: ./src/event-snoop.handler
+    events:
+      - eventBridge:
+          eventBus:
+            Ref: EventBus
+          pattern:
+            source:
+              - exists: true
 
 resources:
   Resources:

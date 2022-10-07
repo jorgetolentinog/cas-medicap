@@ -4,8 +4,8 @@ import { uniqueId } from "../service/unique-id";
 
 export function releaseSyncedEvent(release: Release): EventBusMessage {
   return {
-    id: uniqueId(),
-    type: "release-synced",
+    eventId: uniqueId(),
+    eventType: "release-synced",
     timestamp: new Date().toISOString(),
     detail: {
       id: release.id,

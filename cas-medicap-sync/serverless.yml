@@ -10,6 +10,7 @@ provider:
   name: aws
   runtime: nodejs16.x
   environment:
+    SERVICE_NAME: ${self:service}
     EVENT_BUS_NAME: ${self:custom.cas-medicap.EventBusName}
     DYNAMODB_TABLE_CALENDAR: ${self:service}-${sls:stage}-calendar
     DYNAMODB_TABLE_EXCEPTION: ${self:service}-${sls:stage}-exception

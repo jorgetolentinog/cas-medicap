@@ -3,8 +3,8 @@ export interface EventBus {
 }
 
 export type EventBusMessage = {
-  id: string;
-  type: string;
+  eventId: string;
+  eventType: string;
   timestamp: string;
   detail: Record<string, unknown>;
 };

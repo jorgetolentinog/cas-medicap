@@ -11,6 +11,7 @@ import { DynamoDBReleaseRepository } from "@/infrastructure/repository/dynamodb/
 import { DynamoDBCalendarRepository } from "@/infrastructure/repository/dynamodb/adapter/DynamoDBCalendarRepository";
 import { DynamoDBExceptionRepository } from "@/infrastructure/repository/dynamodb/adapter/DynamoDBExceptionRepository";
 import { MemoryEventBus } from "@/infrastructure/adapter/eventbus/MemoryEventBus";
+import { EventBridgeEventBus } from "../adapter/eventbus/EventBridgeEventBus";
 
 container.register<BookingRepository>(
   "BookingRepository",
@@ -37,6 +38,7 @@ container.register<ExceptionRepository>(
   DynamoDBExceptionRepository
 );
 
-container.register<EventBus>("EventBus", MemoryEventBus);
+// container.register<EventBus>("EventBus", MemoryEventBus);
+container.register<EventBus>("EventBus", EventBridgeEventBus);
 
 export { container };
