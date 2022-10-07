@@ -1,8 +1,13 @@
+import { inject, injectable } from "tsyringe";
 import { BookingRepository } from "../../repository/BookingRepository";
 import { SyncBookingRequest } from "./SyncBookingRequest";
 
+@injectable()
 export class SyncBooking {
-  constructor(private bookingRepository: BookingRepository) {}
+  constructor(
+    @inject("BookingRepository")
+    private bookingRepository: BookingRepository
+  ) {}
 
   async execute(request: SyncBookingRequest): Promise<void> {
     let booking = await this.bookingRepository.findById(request.id);

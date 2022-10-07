@@ -1,5 +1,8 @@
 import { z } from "zod";
 import { httpHandler } from "../../shared/http-handler";
+import { container } from "../../../infrastructure/injection";
+import { SyncBooking } from "../../../domain/usecase/sync-booking/SyncBooking";
+import { localDate } from "../../../domain/service/date";
 
 export const syncBookingHandler = httpHandler(async (event) => {
   const body = bodyParser(event.body ?? "");
@@ -8,6 +11,25 @@ export const syncBookingHandler = httpHandler(async (event) => {
     throw new Error("Invalid request body");
   }
 
+  const bookingDate = localDate.parse(
+    body.data.data.fecha + " " + body.data.data.hora.padStart(5, "0"),
+    "DD/MM/YYYY HH:mm",
+    "YYYY-MM-DDTHH:mm:ss"
+  );
+
+  await container.resolve(SyncBooking).execute({
+    id: body.data.data.indice,
+    companyId: body.data.data.codigoEmpresa,
+    officeId: body.data.data.codigoSucursal,
+    serviceId: body.data.data.codigoServicio,
+    professionalId: body.data.data.ppnProfesional,
+    calendarId: body.data.data.indiceCalendario,
+    patientId: body.data.data.ppnPaciente,
+    date: bookingDate,
+    blockDurationInMinutes: body.data.data.duracionBloques,
+    isEnabled: body.data.data.vigencia,
+  });
+
   return {
     statusCode: 204,
     body: "",
@@ -15,18 +37,23 @@ export const syncBookingHandler = httpHandler(async (event) => {
 });
 
 function bodyParser(body: string) {
+  const stringify = z
+    .string()
+    .or(z.number())
+    .transform((value) => value.toString());
+
   const schema = z.object({
-    type: z.string(),
+    type: z.literal("RSV"),
     data: z.object({
-      indice: z.string().or(z.number()),
+      indice: stringify,
       fecha: z.string(),
       hora: z.string(),
-      codigoEmpresa: z.string().or(z.number()),
-      codigoSucursal: z.string().or(z.number()),
-      codigoServicio: z.string().or(z.number()),
-      ppnProfesional: z.string().or(z.number()),
-      indiceCalendario: z.string().or(z.number()),
-      ppnPaciente: z.string().or(z.number()),
+      codigoEmpresa: stringify,
+      codigoSucursal: stringify,
+      codigoServicio: stringify,
+      ppnProfesional: stringify,
+      indiceCalendario: stringify,
+      ppnPaciente: stringify,
       duracionBloques: z.number(),
       vigencia: z.boolean(),
     }),
