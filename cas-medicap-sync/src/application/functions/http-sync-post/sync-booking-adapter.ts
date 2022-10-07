@@ -1,10 +1,10 @@
 import { z } from "zod";
-import { httpHandler } from "@/application/shared/http-handler";
+import { APIGatewayEvent } from "aws-lambda";
 import { SyncBooking } from "@/domain/usecase/sync-booking/SyncBooking";
 import { localDate } from "@/domain/service/date";
 import { container } from "@/infrastructure/injection";
 
-export const syncBookingHandler = httpHandler(async (event) => {
+export const syncBookingAdapter = async (event: APIGatewayEvent) => {
   const body = bodyParser(event.body ?? "");
 
   if (!body.success) {
@@ -29,12 +29,7 @@ export const syncBookingHandler = httpHandler(async (event) => {
     blockDurationInMinutes: body.data.data.duracionBloques,
     isEnabled: body.data.data.vigencia,
   });
-
-  return {
-    statusCode: 204,
-    body: "",
-  };
-});
+};
 
 function bodyParser(body: string) {
   const stringify = z
