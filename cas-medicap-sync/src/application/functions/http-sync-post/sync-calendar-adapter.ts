@@ -78,7 +78,7 @@ function bodyParser(body: string) {
     .transform((value) => value.toString());
 
   const schema = z.object({
-    type: z.literal("RSV"),
+    type: z.literal("CLD"),
     data: z.object({
       indice: stringify,
       desde: z.string(),

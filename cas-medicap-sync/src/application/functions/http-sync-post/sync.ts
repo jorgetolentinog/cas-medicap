@@ -2,6 +2,8 @@ import { z } from "zod";
 import { httpHandler } from "@/application/shared/http-handler";
 import { syncBookingAdapter } from "./sync-booking-adapter";
 import { syncPreBookingAdapter } from "./sync-pre-booking-adapter";
+import { syncReleaseAdapter } from "./sync-release-adapter";
+import { syncCalendarAdapter } from "./sync-calendar-adapter";
 
 export const handler = httpHandler(async (event) => {
   const body = bodyParser(event.body ?? "");
@@ -16,6 +18,12 @@ export const handler = httpHandler(async (event) => {
       break;
     case "PSV":
       await syncPreBookingAdapter(event);
+      break;
+    case "LBR":
+      await syncReleaseAdapter(event);
+      break;
+    case "CLD":
+      await syncCalendarAdapter(event);
       break;
     default:
       throw new Error("Invalid Type");
