@@ -4,7 +4,7 @@ import { localDate } from "@/domain/service/date";
 import { container } from "tsyringe";
 import { SyncException } from "@/domain/usecase/sync-exception/SyncException";
 
-export const syncExceptionAdapter = async (event: APIGatewayEvent) => {
+export async function syncExceptionAdapter(event: APIGatewayEvent) {
   const body = bodyParser(event.body ?? "");
 
   if (!body.success) {
@@ -47,7 +47,7 @@ export const syncExceptionAdapter = async (event: APIGatewayEvent) => {
       };
     }),
   });
-};
+}
 
 function recurrenceParser(recurrence: string) {
   if (recurrence === "S") {

@@ -4,7 +4,7 @@ import { localDate } from "@/domain/service/date";
 import { container } from "tsyringe";
 import { SyncCalendar } from "@/domain/usecase/sync-calendar/SyncCalendar";
 
-export const syncCalendarAdapter = async (event: APIGatewayEvent) => {
+export async function syncCalendarAdapter(event: APIGatewayEvent) {
   const body = bodyParser(event.body ?? "");
 
   if (!body.success) {
@@ -62,7 +62,7 @@ export const syncCalendarAdapter = async (event: APIGatewayEvent) => {
       };
     }),
   });
-};
+}
 
 function genderParser(gender: string) {
   if (gender !== "F" && gender !== "M") {

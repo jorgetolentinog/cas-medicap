@@ -4,7 +4,7 @@ import { SyncBooking } from "@/domain/usecase/sync-booking/SyncBooking";
 import { localDate } from "@/domain/service/date";
 import { container } from "tsyringe";
 
-export const syncBookingAdapter = async (event: APIGatewayEvent) => {
+export async function syncBookingAdapter(event: APIGatewayEvent) {
   const body = bodyParser(event.body ?? "");
 
   if (!body.success) {
@@ -29,7 +29,7 @@ export const syncBookingAdapter = async (event: APIGatewayEvent) => {
     blockDurationInMinutes: body.data.data.duracionBloques,
     isEnabled: body.data.data.vigencia,
   });
-};
+}
 
 function bodyParser(body: string) {
   const stringify = z

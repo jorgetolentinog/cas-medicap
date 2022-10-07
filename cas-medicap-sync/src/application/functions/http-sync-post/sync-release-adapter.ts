@@ -4,7 +4,7 @@ import { localDate } from "@/domain/service/date";
 import { container } from "tsyringe";
 import { SyncRelease } from "@/domain/usecase/sync-release/SyncRelease";
 
-export const syncReleaseAdapter = async (event: APIGatewayEvent) => {
+export async function syncReleaseAdapter(event: APIGatewayEvent) {
   const body = bodyParser(event.body ?? "");
 
   if (!body.success) {
@@ -25,7 +25,7 @@ export const syncReleaseAdapter = async (event: APIGatewayEvent) => {
     serviceId: body.data.data.servicio,
     isEnabled: body.data.data.vigencia,
   });
-};
+}
 
 function bodyParser(body: string) {
   const stringify = z

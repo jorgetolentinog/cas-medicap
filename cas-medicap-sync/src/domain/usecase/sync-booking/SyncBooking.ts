@@ -47,8 +47,6 @@ export class SyncBooking {
       await this.bookingRepository.update(booking);
     }
 
-    console.log("event booking created");
-
-    this.eventBus.publish(bookingSyncedEvent(booking));
+    await this.eventBus.publish(bookingSyncedEvent(booking));
   }
 }
