@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { controller } from "../shared/controller";
+import { httpHandler } from "../../shared/http-handler";
 
-export const syncBookingController = controller(async (event) => {
+export const bookingHandler = httpHandler(async (event) => {
   const body = bodyParser(event.body ?? "");
 
   if (!body.success) {

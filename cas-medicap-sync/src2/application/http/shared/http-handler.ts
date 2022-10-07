@@ -1,6 +1,6 @@
 import { APIGatewayEvent } from "aws-lambda";
 
-export const controller = (handler: Handler) => {
+export const httpHandler = (handler: Handler) => {
   return async (event: APIGatewayEvent) => {
     let response: Response;
 
