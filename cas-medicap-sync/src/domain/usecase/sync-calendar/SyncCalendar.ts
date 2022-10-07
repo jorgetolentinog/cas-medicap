@@ -1,3 +1,5 @@
+import { calendarSyncedEvent } from "@/domain/event/calendar-synced-event";
+import { EventBus } from "@/domain/ports/EventBus";
 import { CalendarRepository } from "@/domain/repository/CalendarRepository";
 import { inject, injectable } from "tsyringe";
 import { SyncCalendarRequest } from "./SyncCalendarRequest";
@@ -6,7 +8,10 @@ import { SyncCalendarRequest } from "./SyncCalendarRequest";
 export class SyncCalendar {
   constructor(
     @inject("CalendarRepository")
-    private calendarRepository: CalendarRepository
+    private calendarRepository: CalendarRepository,
+
+    @inject("EventBus")
+    private eventBus: EventBus
   ) {}
 
   async execute(request: SyncCalendarRequest): Promise<void> {
@@ -48,6 +53,6 @@ export class SyncCalendar {
       await this.calendarRepository.update(calendar);
     }
 
-    console.log("event calendar created");
+    await this.eventBus.publish(calendarSyncedEvent(calendar));
   }
 }

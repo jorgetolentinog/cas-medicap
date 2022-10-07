@@ -1,3 +1,5 @@
+import { releaseSyncedEvent } from "@/domain/event/release-synced-event";
+import { EventBus } from "@/domain/ports/EventBus";
 import { ReleaseRepository } from "@/domain/repository/ReleaseRepository";
 import { inject, injectable } from "tsyringe";
 import { SyncReleaseRequest } from "./SyncReleaseRequest";
@@ -6,7 +8,10 @@ import { SyncReleaseRequest } from "./SyncReleaseRequest";
 export class SyncRelease {
   constructor(
     @inject("ReleaseRepository")
-    private releaseRepository: ReleaseRepository
+    private releaseRepository: ReleaseRepository,
+
+    @inject("EventBus")
+    private eventBus: EventBus
   ) {}
 
   async execute(request: SyncReleaseRequest): Promise<void> {
@@ -35,6 +40,6 @@ export class SyncRelease {
       await this.releaseRepository.update(release);
     }
 
-    console.log("event booking created");
+    await this.eventBus.publish(releaseSyncedEvent(release));
   }
 }

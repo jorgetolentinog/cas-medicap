@@ -1,3 +1,5 @@
+import { preBookingSyncedEvent } from "@/domain/event/pre-booking-synced-event";
+import { EventBus } from "@/domain/ports/EventBus";
 import { PreBookingRepository } from "@/domain/repository/PreBookingRepository";
 import { inject, injectable } from "tsyringe";
 import { SyncPreBookingRequest } from "./SyncPreBookingRequest";
@@ -6,7 +8,10 @@ import { SyncPreBookingRequest } from "./SyncPreBookingRequest";
 export class SyncPreBooking {
   constructor(
     @inject("PreBookingRepository")
-    private preBookingRepository: PreBookingRepository
+    private preBookingRepository: PreBookingRepository,
+
+    @inject("EventBus")
+    private eventBus: EventBus
   ) {}
 
   async execute(request: SyncPreBookingRequest): Promise<void> {
@@ -40,6 +45,6 @@ export class SyncPreBooking {
       await this.preBookingRepository.update(preBooking);
     }
 
-    console.log("event pre booking created");
+    await this.eventBus.publish(preBookingSyncedEvent(preBooking));
   }
 }

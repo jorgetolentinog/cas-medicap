@@ -5,7 +5,7 @@ import { uniqueId } from "../service/unique-id";
 export function exceptionSyncedEvent(exception: Exception): EventBusMessage {
   return {
     id: uniqueId(),
-    type: "calendar-synced",
+    type: "exception-synced",
     timestamp: new Date().toISOString(),
     detail: {
       id: exception.id,

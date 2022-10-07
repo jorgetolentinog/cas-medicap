@@ -1,3 +1,5 @@
+import { exceptionSyncedEvent } from "@/domain/event/exception-synced-event";
+import { EventBus } from "@/domain/ports/EventBus";
 import { ExceptionRepository } from "@/domain/repository/ExceptionRepository";
 import { inject, injectable } from "tsyringe";
 import { SyncExceptionRequest } from "./SyncExceptionRequest";
@@ -6,7 +8,10 @@ import { SyncExceptionRequest } from "./SyncExceptionRequest";
 export class SyncException {
   constructor(
     @inject("ExceptionRepository")
-    private exceptionRepository: ExceptionRepository
+    private exceptionRepository: ExceptionRepository,
+
+    @inject("EventBus")
+    private eventBus: EventBus
   ) {}
 
   async execute(request: SyncExceptionRequest): Promise<void> {
@@ -46,6 +51,6 @@ export class SyncException {
       await this.exceptionRepository.update(exception);
     }
 
-    console.log("event exception created");
+    await this.eventBus.publish(exceptionSyncedEvent(exception));
   }
 }
