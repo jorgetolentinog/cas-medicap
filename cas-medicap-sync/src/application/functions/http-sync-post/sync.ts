@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { httpHandler } from "../../shared/http-handler";
-import { bookingHandler } from "./booking";
+import { syncBookingHandler } from "./sync-booking";
 
 export const handler = httpHandler(async (event) => {
   const body = bodyParser(event.body ?? "");
@@ -10,7 +10,7 @@ export const handler = httpHandler(async (event) => {
   }
 
   if (body.data.type === "RSV") {
-    return await bookingHandler(event);
+    return await syncBookingHandler(event);
   }
 
   throw new Error("Invalid Type");
