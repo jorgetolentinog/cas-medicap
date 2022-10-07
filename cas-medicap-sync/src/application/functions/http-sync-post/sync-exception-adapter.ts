@@ -1,32 +1,32 @@
-import { z } from "zod";
-import { APIGatewayEvent } from "aws-lambda";
-import { localDate } from "@/domain/service/date";
-import { container } from "tsyringe";
-import { SyncException } from "@/domain/usecase/sync-exception/SyncException";
+import { z } from 'zod'
+import { APIGatewayEvent } from 'aws-lambda'
+import { localDate } from '@/domain/service/date'
+import { container } from 'tsyringe'
+import { SyncException } from '@/domain/usecase/sync-exception/SyncException'
 
 export async function syncExceptionAdapter(event: APIGatewayEvent) {
-  const body = bodyParser(event.body ?? "");
+  const body = bodyParser(event.body ?? '')
 
   if (!body.success) {
-    throw new Error("Invalid request body");
+    throw new Error('Invalid request body')
   }
 
   const startDate = localDate.parse(
     body.data.data.desde,
-    "DD/MM/YYYY",
-    "YYYY-MM-DD"
-  );
+    'DD/MM/YYYY',
+    'YYYY-MM-DD'
+  )
 
   const endDate = localDate.parse(
     body.data.data.hasta,
-    "DD/MM/YYYY",
-    "YYYY-MM-DD"
-  );
+    'DD/MM/YYYY',
+    'YYYY-MM-DD'
+  )
 
   await container.resolve(SyncException).execute({
     id: body.data.data.indice,
-    startDate: startDate,
-    endDate: endDate,
+    startDate,
+    endDate,
     isEnabled: body.data.data.vigencia,
     recurrence: recurrenceParser(body.data.data.recurrencia),
     repeatRecurrenceEvery: body.data.data.repetirCada,
@@ -40,33 +40,33 @@ export async function syncExceptionAdapter(event: APIGatewayEvent) {
         dayOfWeek: Number(dia.diaSemana),
         blocks: dia.bloques.map((bloque) => {
           return {
-            startTime: bloque[0].padStart(5, "0") + ":00",
-            endTime: bloque[1].padStart(5, "0") + ":00",
-          };
-        }),
-      };
-    }),
-  });
+            startTime: bloque[0].padStart(5, '0') + ':00',
+            endTime: bloque[1].padStart(5, '0') + ':00'
+          }
+        })
+      }
+    })
+  })
 }
 
 function recurrenceParser(recurrence: string) {
-  if (recurrence === "S") {
-    return "weekly";
-  } else if (recurrence === "M") {
-    return "monthly";
+  if (recurrence === 'S') {
+    return 'weekly'
+  } else if (recurrence === 'M') {
+    return 'monthly'
   }
 
-  throw new Error("Recurrence value is unknown");
+  throw new Error('Recurrence value is unknown')
 }
 
 function bodyParser(body: string) {
   const stringify = z
     .string()
     .or(z.number())
-    .transform((value) => value.toString());
+    .transform((value) => value.toString())
 
   const schema = z.object({
-    type: z.literal("EXC"),
+    type: z.literal('EXC'),
     data: z.object({
       indice: stringify,
       desde: z.string(),
@@ -82,11 +82,11 @@ function bodyParser(body: string) {
       dias: z.array(
         z.object({
           diaSemana: z.string(),
-          bloques: z.array(z.array(z.string())),
+          bloques: z.array(z.array(z.string()))
         })
-      ),
-    }),
-  });
+      )
+    })
+  })
 
-  return schema.safeParse(JSON.parse(body));
+  return schema.safeParse(JSON.parse(body))
 }

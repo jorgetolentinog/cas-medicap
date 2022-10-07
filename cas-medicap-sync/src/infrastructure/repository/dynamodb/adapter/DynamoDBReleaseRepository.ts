@@ -1,13 +1,13 @@
-import { injectable } from "tsyringe";
-import { ReleaseRepository } from "@/domain/repository/ReleaseRepository";
-import { Release } from "@/domain/schema/Release";
-import { DynamoDB } from "../DynamoDB";
+import { injectable } from 'tsyringe'
+import { ReleaseRepository } from '@/domain/repository/ReleaseRepository'
+import { Release } from '@/domain/schema/Release'
+import { DynamoDB } from '../DynamoDB'
 
 @injectable()
 export class DynamoDBReleaseRepository implements ReleaseRepository {
-  private _table = process.env.DYNAMODB_TABLE_RELEASE ?? 'ReleaseTable'
+  private readonly _table = process.env.DYNAMODB_TABLE_RELEASE ?? 'ReleaseTable'
 
-  constructor(private dynamodb: DynamoDB) {}
+  constructor(private readonly dynamodb: DynamoDB) {}
 
   async create(release: Release): Promise<void> {
     await this.dynamodb.client
@@ -46,9 +46,9 @@ export class DynamoDBReleaseRepository implements ReleaseRepository {
     for (const prop in attrs) {
       updateExpression += `#${prop} = :${prop},`
       expressionAttributeNames[`#${prop}`] = prop
-      expressionAttributeValues[`:${prop}`] = (attrs as Record<string, unknown>)[
-        prop
-      ]
+      expressionAttributeValues[`:${prop}`] = (
+        attrs as Record<string, unknown>
+      )[prop]
     }
     updateExpression = updateExpression.slice(0, -1)
 
@@ -78,7 +78,7 @@ export class DynamoDBReleaseRepository implements ReleaseRepository {
       })
       .promise()
 
-    const item = result.Items && result.Items[0]
+    const item = result.Items != null && result.Items[0]
     if (item == null) {
       return null
     }

@@ -1,21 +1,21 @@
-import { z } from "zod";
-import { APIGatewayEvent } from "aws-lambda";
-import { localDate } from "@/domain/service/date";
-import { SyncPreBooking } from "@/domain/usecase/sync-pre-booking/SyncPreBooking";
-import { container } from "tsyringe";
+import { z } from 'zod'
+import { APIGatewayEvent } from 'aws-lambda'
+import { localDate } from '@/domain/service/date'
+import { SyncPreBooking } from '@/domain/usecase/sync-pre-booking/SyncPreBooking'
+import { container } from 'tsyringe'
 
 export async function syncPreBookingAdapter(event: APIGatewayEvent) {
-  const body = bodyParser(event.body ?? "");
+  const body = bodyParser(event.body ?? '')
 
   if (!body.success) {
-    throw new Error("Invalid request body");
+    throw new Error('Invalid request body')
   }
 
   const preBookingDate = localDate.parse(
-    body.data.data.fecha + " " + body.data.data.hora.padStart(5, "0"),
-    "DD/MM/YYYY HH:mm",
-    "YYYY-MM-DDTHH:mm:ss"
-  );
+    body.data.data.fecha + ' ' + body.data.data.hora.padStart(5, '0'),
+    'DD/MM/YYYY HH:mm',
+    'YYYY-MM-DDTHH:mm:ss'
+  )
 
   await container.resolve(SyncPreBooking).execute({
     id: body.data.data.indice,
@@ -26,18 +26,18 @@ export async function syncPreBookingAdapter(event: APIGatewayEvent) {
     calendarId: body.data.data.indiceCalendario,
     date: preBookingDate,
     blockDurationInMinutes: body.data.data.duracionBloques,
-    isEnabled: body.data.data.vigencia,
-  });
+    isEnabled: body.data.data.vigencia
+  })
 }
 
 function bodyParser(body: string) {
   const stringify = z
     .string()
     .or(z.number())
-    .transform((value) => value.toString());
+    .transform((value) => value.toString())
 
   const schema = z.object({
-    type: z.literal("PSV"),
+    type: z.literal('PSV'),
     data: z.object({
       indice: stringify,
       fecha: z.string(),
@@ -48,9 +48,9 @@ function bodyParser(body: string) {
       ppnProfesional: stringify,
       indiceCalendario: stringify,
       duracionBloques: z.number(),
-      vigencia: z.boolean(),
-    }),
-  });
+      vigencia: z.boolean()
+    })
+  })
 
-  return schema.safeParse(JSON.parse(body));
+  return schema.safeParse(JSON.parse(body))
 }

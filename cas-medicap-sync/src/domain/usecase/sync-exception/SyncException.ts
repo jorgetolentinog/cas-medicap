@@ -1,21 +1,21 @@
-import { exceptionSyncedEvent } from "@/domain/event/exception-synced-event";
-import { EventBus } from "@/domain/ports/EventBus";
-import { ExceptionRepository } from "@/domain/repository/ExceptionRepository";
-import { inject, injectable } from "tsyringe";
-import { SyncExceptionRequest } from "./SyncExceptionRequest";
+import { exceptionSyncedEvent } from '@/domain/event/exception-synced-event'
+import { EventBus } from '@/domain/ports/EventBus'
+import { ExceptionRepository } from '@/domain/repository/ExceptionRepository'
+import { inject, injectable } from 'tsyringe'
+import { SyncExceptionRequest } from './SyncExceptionRequest'
 
 @injectable()
 export class SyncException {
   constructor(
-    @inject("ExceptionRepository")
-    private exceptionRepository: ExceptionRepository,
+    @inject('ExceptionRepository')
+    private readonly exceptionRepository: ExceptionRepository,
 
-    @inject("EventBus")
-    private eventBus: EventBus
+    @inject('EventBus')
+    private readonly eventBus: EventBus
   ) {}
 
   async execute(request: SyncExceptionRequest): Promise<void> {
-    let exception = await this.exceptionRepository.findById(request.id);
+    let exception = await this.exceptionRepository.findById(request.id)
 
     if (exception == null) {
       exception = {
@@ -32,25 +32,25 @@ export class SyncException {
         dayOfWeek: request.dayOfWeek,
         days: request.days,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      await this.exceptionRepository.create(exception);
+        updatedAt: new Date().toISOString()
+      }
+      await this.exceptionRepository.create(exception)
     } else {
-      exception.startDate = request.startDate;
-      exception.endDate = request.endDate;
-      exception.isEnabled = request.isEnabled;
-      exception.recurrence = request.recurrence;
-      exception.repeatRecurrenceEvery = request.repeatRecurrenceEvery;
-      exception.professionalIds = request.professionalIds;
-      exception.serviceIds = request.serviceIds;
-      exception.dayOfMonth = request.dayOfMonth;
-      exception.weekOfMonth = request.weekOfMonth;
-      exception.dayOfWeek = request.dayOfWeek;
-      exception.days = request.days;
-      exception.updatedAt = new Date().toISOString();
-      await this.exceptionRepository.update(exception);
+      exception.startDate = request.startDate
+      exception.endDate = request.endDate
+      exception.isEnabled = request.isEnabled
+      exception.recurrence = request.recurrence
+      exception.repeatRecurrenceEvery = request.repeatRecurrenceEvery
+      exception.professionalIds = request.professionalIds
+      exception.serviceIds = request.serviceIds
+      exception.dayOfMonth = request.dayOfMonth
+      exception.weekOfMonth = request.weekOfMonth
+      exception.dayOfWeek = request.dayOfWeek
+      exception.days = request.days
+      exception.updatedAt = new Date().toISOString()
+      await this.exceptionRepository.update(exception)
     }
 
-    await this.eventBus.publish(exceptionSyncedEvent(exception));
+    await this.eventBus.publish(exceptionSyncedEvent(exception))
   }
 }

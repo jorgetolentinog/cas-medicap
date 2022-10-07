@@ -1,13 +1,14 @@
-import { injectable } from "tsyringe";
-import { PreBookingRepository } from "@/domain/repository/PreBookingRepository";
-import { PreBooking } from "@/domain/schema/PreBooking";
-import { DynamoDB } from "../DynamoDB";
+import { injectable } from 'tsyringe'
+import { PreBookingRepository } from '@/domain/repository/PreBookingRepository'
+import { PreBooking } from '@/domain/schema/PreBooking'
+import { DynamoDB } from '../DynamoDB'
 
 @injectable()
 export class DynamoDBPreBookingRepository implements PreBookingRepository {
-  private _table = process.env.DYNAMODB_TABLE_PRE_BOOKING ?? 'PreBookingTable'
+  private readonly _table =
+    process.env.DYNAMODB_TABLE_PRE_BOOKING ?? 'PreBookingTable'
 
-  constructor(private dynamodb: DynamoDB) {}
+  constructor(private readonly dynamodb: DynamoDB) {}
 
   async create(preBooking: PreBooking): Promise<void> {
     await this.dynamodb.client
@@ -52,9 +53,9 @@ export class DynamoDBPreBookingRepository implements PreBookingRepository {
     for (const prop in attrs) {
       updateExpression += `#${prop} = :${prop},`
       expressionAttributeNames[`#${prop}`] = prop
-      expressionAttributeValues[`:${prop}`] = (attrs as Record<string, unknown>)[
-        prop
-      ]
+      expressionAttributeValues[`:${prop}`] = (
+        attrs as Record<string, unknown>
+      )[prop]
     }
     updateExpression = updateExpression.slice(0, -1)
 
@@ -84,7 +85,7 @@ export class DynamoDBPreBookingRepository implements PreBookingRepository {
       })
       .promise()
 
-    const item = result.Items && result.Items[0]
+    const item = result.Items != null && result.Items[0]
     if (item == null) {
       return null
     }

@@ -1,11 +1,11 @@
-import { EventBusMessage } from "../ports/EventBus";
-import { Calendar } from "../schema/Calendar";
-import { uniqueId } from "../service/unique-id";
+import { EventBusMessage } from '../ports/EventBus'
+import { Calendar } from '../schema/Calendar'
+import { uniqueId } from '../service/unique-id'
 
 export function calendarSyncedEvent(calendar: Calendar): EventBusMessage {
   return {
     eventId: uniqueId(),
-    eventType: "calendar-synced",
+    eventType: 'calendar-synced',
     timestamp: new Date().toISOString(),
     detail: {
       id: calendar.id,
@@ -22,7 +22,7 @@ export function calendarSyncedEvent(calendar: Calendar): EventBusMessage {
       conditionsOfService: calendar.conditionsOfService,
       days: calendar.days,
       createdAt: calendar.createdAt,
-      updatedAt: calendar.updatedAt,
-    },
-  };
+      updatedAt: calendar.updatedAt
+    }
+  }
 }

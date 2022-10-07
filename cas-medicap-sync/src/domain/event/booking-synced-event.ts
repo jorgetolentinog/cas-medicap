@@ -1,11 +1,11 @@
-import { EventBusMessage } from "../ports/EventBus";
-import { Booking } from "../schema/Booking";
-import { uniqueId } from "../service/unique-id";
+import { EventBusMessage } from '../ports/EventBus'
+import { Booking } from '../schema/Booking'
+import { uniqueId } from '../service/unique-id'
 
 export function bookingSyncedEvent(booking: Booking): EventBusMessage {
   return {
     eventId: uniqueId(),
-    eventType: "booking-synced",
+    eventType: 'booking-synced',
     timestamp: new Date().toISOString(),
     detail: {
       id: booking.id,
@@ -19,7 +19,7 @@ export function bookingSyncedEvent(booking: Booking): EventBusMessage {
       blockDurationInMinutes: booking.blockDurationInMinutes,
       isEnabled: booking.isEnabled,
       createdAt: booking.createdAt,
-      updatedAt: booking.updatedAt,
-    },
-  };
+      updatedAt: booking.updatedAt
+    }
+  }
 }

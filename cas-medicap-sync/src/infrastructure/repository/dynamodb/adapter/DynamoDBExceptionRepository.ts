@@ -1,13 +1,14 @@
-import { injectable } from "tsyringe";
-import { ExceptionRepository } from "@/domain/repository/ExceptionRepository";
-import { Exception } from "@/domain/schema/Exception";
-import { DynamoDB } from "../DynamoDB";
+import { injectable } from 'tsyringe'
+import { ExceptionRepository } from '@/domain/repository/ExceptionRepository'
+import { Exception } from '@/domain/schema/Exception'
+import { DynamoDB } from '../DynamoDB'
 
 @injectable()
 export class DynamoDBExceptionRepository implements ExceptionRepository {
-  private _table = process.env.DYNAMODB_TABLE_EXCEPTION ?? "ExceptionTable";
+  private readonly _table =
+    process.env.DYNAMODB_TABLE_EXCEPTION ?? 'ExceptionTable'
 
-  constructor(private dynamodb: DynamoDB) {}
+  constructor(private readonly dynamodb: DynamoDB) {}
 
   async create(exception: Exception): Promise<void> {
     await this.dynamodb.client
@@ -27,11 +28,11 @@ export class DynamoDBExceptionRepository implements ExceptionRepository {
           dayOfWeek: exception.dayOfWeek,
           days: exception.days,
           createdAt: exception.createdAt,
-          updatedAt: exception.updatedAt,
+          updatedAt: exception.updatedAt
         },
-        ConditionExpression: "attribute_not_exists(id)",
+        ConditionExpression: 'attribute_not_exists(id)'
       })
-      .promise();
+      .promise()
   }
 
   async update(exception: Exception): Promise<void> {
@@ -48,50 +49,50 @@ export class DynamoDBExceptionRepository implements ExceptionRepository {
       dayOfWeek: exception.dayOfWeek,
       days: exception.days,
       createdAt: exception.createdAt,
-      updatedAt: exception.updatedAt,
-    };
+      updatedAt: exception.updatedAt
+    }
 
-    let updateExpression = "set ";
-    const expressionAttributeNames: Record<string, string> = {};
-    const expressionAttributeValues: Record<string, unknown> = {};
+    let updateExpression = 'set '
+    const expressionAttributeNames: Record<string, string> = {}
+    const expressionAttributeValues: Record<string, unknown> = {}
     for (const prop in attrs) {
-      updateExpression += `#${prop} = :${prop},`;
-      expressionAttributeNames[`#${prop}`] = prop;
+      updateExpression += `#${prop} = :${prop},`
+      expressionAttributeNames[`#${prop}`] = prop
       expressionAttributeValues[`:${prop}`] = (
         attrs as unknown as Record<string, unknown>
-      )[prop];
+      )[prop]
     }
-    updateExpression = updateExpression.slice(0, -1);
+    updateExpression = updateExpression.slice(0, -1)
 
     await this.dynamodb.client
       .update({
         TableName: this._table,
         Key: {
-          id: exception.id,
+          id: exception.id
         },
         UpdateExpression: updateExpression,
-        ConditionExpression: "attribute_exists(id)",
+        ConditionExpression: 'attribute_exists(id)',
         ExpressionAttributeNames: expressionAttributeNames,
-        ExpressionAttributeValues: expressionAttributeValues,
+        ExpressionAttributeValues: expressionAttributeValues
       })
-      .promise();
+      .promise()
   }
 
   async findById(exceptionId: string): Promise<Exception | null> {
     const result = await this.dynamodb.client
       .query({
         TableName: this._table,
-        KeyConditionExpression: "#id = :id",
-        ExpressionAttributeNames: { "#id": "id" },
+        KeyConditionExpression: '#id = :id',
+        ExpressionAttributeNames: { '#id': 'id' },
         ExpressionAttributeValues: {
-          ":id": exceptionId,
-        },
+          ':id': exceptionId
+        }
       })
-      .promise();
+      .promise()
 
-    const item = result.Items && result.Items[0];
+    const item = result.Items != null && result.Items[0]
     if (item == null) {
-      return null;
+      return null
     }
 
     return {
@@ -108,7 +109,7 @@ export class DynamoDBExceptionRepository implements ExceptionRepository {
       dayOfWeek: item.dayOfWeek,
       days: item.days,
       createdAt: item.createdAt,
-      updatedAt: item.updatedAt,
-    };
+      updatedAt: item.updatedAt
+    }
   }
 }

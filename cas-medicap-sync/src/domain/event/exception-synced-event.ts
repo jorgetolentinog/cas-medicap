@@ -1,11 +1,11 @@
-import { EventBusMessage } from "../ports/EventBus";
-import { Exception } from "../schema/Exception";
-import { uniqueId } from "../service/unique-id";
+import { EventBusMessage } from '../ports/EventBus'
+import { Exception } from '../schema/Exception'
+import { uniqueId } from '../service/unique-id'
 
 export function exceptionSyncedEvent(exception: Exception): EventBusMessage {
   return {
     eventId: uniqueId(),
-    eventType: "exception-synced",
+    eventType: 'exception-synced',
     timestamp: new Date().toISOString(),
     detail: {
       id: exception.id,
@@ -21,7 +21,7 @@ export function exceptionSyncedEvent(exception: Exception): EventBusMessage {
       dayOfWeek: exception.dayOfWeek,
       days: exception.days,
       createdAt: exception.createdAt,
-      updatedAt: exception.updatedAt,
-    },
-  };
+      updatedAt: exception.updatedAt
+    }
+  }
 }

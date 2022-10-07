@@ -1,11 +1,11 @@
-import { EventBus, EventBusMessage } from "@/domain/ports/EventBus";
-import EventBridge from "aws-sdk/clients/eventbridge";
+import { EventBus, EventBusMessage } from '@/domain/ports/EventBus'
+import EventBridge from 'aws-sdk/clients/eventbridge'
 
 export class EventBridgeEventBus implements EventBus {
-  private _eventBridge: EventBridge;
+  private readonly _eventBridge: EventBridge
 
   constructor() {
-    this._eventBridge = new EventBridge();
+    this._eventBridge = new EventBridge()
   }
 
   async publish(message: EventBusMessage): Promise<void> {
@@ -17,10 +17,10 @@ export class EventBridgeEventBus implements EventBus {
             Source: process.env.SERVICE_NAME,
             DetailType: message.eventType,
             Time: new Date(message.timestamp),
-            Detail: JSON.stringify(message),
-          },
-        ],
+            Detail: JSON.stringify(message)
+          }
+        ]
       })
-      .promise();
+      .promise()
   }
 }

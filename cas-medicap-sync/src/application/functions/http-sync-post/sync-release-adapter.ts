@@ -1,21 +1,21 @@
-import { z } from "zod";
-import { APIGatewayEvent } from "aws-lambda";
-import { localDate } from "@/domain/service/date";
-import { container } from "tsyringe";
-import { SyncRelease } from "@/domain/usecase/sync-release/SyncRelease";
+import { z } from 'zod'
+import { APIGatewayEvent } from 'aws-lambda'
+import { localDate } from '@/domain/service/date'
+import { container } from 'tsyringe'
+import { SyncRelease } from '@/domain/usecase/sync-release/SyncRelease'
 
 export async function syncReleaseAdapter(event: APIGatewayEvent) {
-  const body = bodyParser(event.body ?? "");
+  const body = bodyParser(event.body ?? '')
 
   if (!body.success) {
-    throw new Error("Invalid request body");
+    throw new Error('Invalid request body')
   }
 
   const bookingDate = localDate.parse(
-    body.data.data.fecha + " " + body.data.data.hora.padStart(5, "0"),
-    "DD/MM/YYYY HH:mm",
-    "YYYY-MM-DDTHH:mm:ss"
-  );
+    body.data.data.fecha + ' ' + body.data.data.hora.padStart(5, '0'),
+    'DD/MM/YYYY HH:mm',
+    'YYYY-MM-DDTHH:mm:ss'
+  )
 
   await container.resolve(SyncRelease).execute({
     id: body.data.data.indice,
@@ -23,18 +23,18 @@ export async function syncReleaseAdapter(event: APIGatewayEvent) {
     blockDurationInMinutes: body.data.data.duracionBloque,
     professionalId: body.data.data.ppnProfesional,
     serviceId: body.data.data.servicio,
-    isEnabled: body.data.data.vigencia,
-  });
+    isEnabled: body.data.data.vigencia
+  })
 }
 
 function bodyParser(body: string) {
   const stringify = z
     .string()
     .or(z.number())
-    .transform((value) => value.toString());
+    .transform((value) => value.toString())
 
   const schema = z.object({
-    type: z.literal("LBR"),
+    type: z.literal('LBR'),
     data: z.object({
       indice: stringify,
       fecha: z.string(),
@@ -42,9 +42,9 @@ function bodyParser(body: string) {
       duracionBloque: z.number(),
       ppnProfesional: stringify,
       servicio: z.string(),
-      vigencia: z.boolean(),
-    }),
-  });
+      vigencia: z.boolean()
+    })
+  })
 
-  return schema.safeParse(JSON.parse(body));
+  return schema.safeParse(JSON.parse(body))
 }

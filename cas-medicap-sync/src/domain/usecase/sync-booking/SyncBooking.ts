@@ -1,21 +1,21 @@
-import { inject, injectable } from "tsyringe";
-import { BookingRepository } from "@/domain/repository/BookingRepository";
-import { SyncBookingRequest } from "./SyncBookingRequest";
-import { EventBus } from "@/domain/ports/EventBus";
-import { bookingSyncedEvent } from "@/domain/event/booking-synced-event";
+import { inject, injectable } from 'tsyringe'
+import { BookingRepository } from '@/domain/repository/BookingRepository'
+import { SyncBookingRequest } from './SyncBookingRequest'
+import { EventBus } from '@/domain/ports/EventBus'
+import { bookingSyncedEvent } from '@/domain/event/booking-synced-event'
 
 @injectable()
 export class SyncBooking {
   constructor(
-    @inject("BookingRepository")
-    private bookingRepository: BookingRepository,
+    @inject('BookingRepository')
+    private readonly bookingRepository: BookingRepository,
 
-    @inject("EventBus")
-    private eventBus: EventBus
+    @inject('EventBus')
+    private readonly eventBus: EventBus
   ) {}
 
   async execute(request: SyncBookingRequest): Promise<void> {
-    let booking = await this.bookingRepository.findById(request.id);
+    let booking = await this.bookingRepository.findById(request.id)
 
     if (booking == null) {
       booking = {
@@ -30,23 +30,23 @@ export class SyncBooking {
         blockDurationInMinutes: request.blockDurationInMinutes,
         isEnabled: request.isEnabled,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      await this.bookingRepository.create(booking);
+        updatedAt: new Date().toISOString()
+      }
+      await this.bookingRepository.create(booking)
     } else {
-      booking.date = request.date;
-      booking.companyId = request.companyId;
-      booking.officeId = request.officeId;
-      booking.serviceId = request.serviceId;
-      booking.professionalId = request.professionalId;
-      booking.patientId = request.patientId;
-      booking.calendarId = request.calendarId;
-      booking.blockDurationInMinutes = request.blockDurationInMinutes;
-      booking.isEnabled = request.isEnabled;
-      booking.updatedAt = new Date().toISOString();
-      await this.bookingRepository.update(booking);
+      booking.date = request.date
+      booking.companyId = request.companyId
+      booking.officeId = request.officeId
+      booking.serviceId = request.serviceId
+      booking.professionalId = request.professionalId
+      booking.patientId = request.patientId
+      booking.calendarId = request.calendarId
+      booking.blockDurationInMinutes = request.blockDurationInMinutes
+      booking.isEnabled = request.isEnabled
+      booking.updatedAt = new Date().toISOString()
+      await this.bookingRepository.update(booking)
     }
 
-    await this.eventBus.publish(bookingSyncedEvent(booking));
+    await this.eventBus.publish(bookingSyncedEvent(booking))
   }
 }

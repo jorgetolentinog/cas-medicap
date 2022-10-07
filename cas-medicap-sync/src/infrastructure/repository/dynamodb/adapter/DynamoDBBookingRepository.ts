@@ -1,13 +1,13 @@
-import { injectable } from "tsyringe";
-import { BookingRepository } from "@/domain/repository/BookingRepository";
-import { Booking } from "@/domain/schema/Booking";
-import { DynamoDB } from "../DynamoDB";
+import { injectable } from 'tsyringe'
+import { BookingRepository } from '@/domain/repository/BookingRepository'
+import { Booking } from '@/domain/schema/Booking'
+import { DynamoDB } from '../DynamoDB'
 
 @injectable()
 export class DynamoDBBookingRepository implements BookingRepository {
-  private _table = process.env.DYNAMODB_TABLE_BOOKING ?? "BookingTable";
+  private readonly _table = process.env.DYNAMODB_TABLE_BOOKING ?? 'BookingTable'
 
-  constructor(private dynamodb: DynamoDB) {}
+  constructor(private readonly dynamodb: DynamoDB) {}
 
   async create(booking: Booking): Promise<void> {
     await this.dynamodb.client
@@ -25,11 +25,11 @@ export class DynamoDBBookingRepository implements BookingRepository {
           blockDurationInMinutes: booking.blockDurationInMinutes,
           isEnabled: booking.isEnabled,
           createdAt: booking.createdAt,
-          updatedAt: booking.updatedAt,
+          updatedAt: booking.updatedAt
         },
-        ConditionExpression: "attribute_not_exists(id)",
+        ConditionExpression: 'attribute_not_exists(id)'
       })
-      .promise();
+      .promise()
   }
 
   async update(booking: Booking): Promise<void> {
@@ -44,50 +44,50 @@ export class DynamoDBBookingRepository implements BookingRepository {
       blockDurationInMinutes: booking.blockDurationInMinutes,
       isEnabled: booking.isEnabled,
       createdAt: booking.createdAt,
-      updatedAt: booking.updatedAt,
-    };
+      updatedAt: booking.updatedAt
+    }
 
-    let updateExpression = "set ";
-    const expressionAttributeNames: Record<string, string> = {};
-    const expressionAttributeValues: Record<string, unknown> = {};
+    let updateExpression = 'set '
+    const expressionAttributeNames: Record<string, string> = {}
+    const expressionAttributeValues: Record<string, unknown> = {}
     for (const prop in attrs) {
-      updateExpression += ` #${prop} = :${prop},`;
-      expressionAttributeNames[`#${prop}`] = prop;
+      updateExpression += ` #${prop} = :${prop},`
+      expressionAttributeNames[`#${prop}`] = prop
       expressionAttributeValues[`:${prop}`] = (
         attrs as Record<string, unknown>
-      )[prop];
+      )[prop]
     }
-    updateExpression = updateExpression.slice(0, -1);
+    updateExpression = updateExpression.slice(0, -1)
 
     await this.dynamodb.client
       .update({
         TableName: this._table,
         Key: {
-          id: booking.id,
+          id: booking.id
         },
         UpdateExpression: updateExpression,
-        ConditionExpression: "attribute_exists(id)",
+        ConditionExpression: 'attribute_exists(id)',
         ExpressionAttributeNames: expressionAttributeNames,
-        ExpressionAttributeValues: expressionAttributeValues,
+        ExpressionAttributeValues: expressionAttributeValues
       })
-      .promise();
+      .promise()
   }
 
   async findById(bookingId: string): Promise<Booking | null> {
     const result = await this.dynamodb.client
       .query({
         TableName: this._table,
-        KeyConditionExpression: "#id = :id",
-        ExpressionAttributeNames: { "#id": "id" },
+        KeyConditionExpression: '#id = :id',
+        ExpressionAttributeNames: { '#id': 'id' },
         ExpressionAttributeValues: {
-          ":id": bookingId,
-        },
+          ':id': bookingId
+        }
       })
-      .promise();
+      .promise()
 
-    const item = result.Items && result.Items[0];
+    const item = result.Items != null && result.Items[0]
     if (item == null) {
-      return null;
+      return null
     }
 
     return {
@@ -102,7 +102,7 @@ export class DynamoDBBookingRepository implements BookingRepository {
       isEnabled: item.isEnabled,
       blockDurationInMinutes: item.blockDurationInMinutes,
       createdAt: item.createdAt,
-      updatedAt: item.updatedAt,
-    };
+      updatedAt: item.updatedAt
+    }
   }
 }

@@ -1,7 +1,7 @@
-import { Booking } from "../schema/Booking";
+import { Booking } from '../schema/Booking'
 
 export interface BookingRepository {
-  create(booking: Booking): Promise<void>;
-  update(booking: Booking): Promise<void>;
-  findById(bookingId: string): Promise<Booking | null>;
+  create: (booking: Booking) => Promise<void>
+  update: (booking: Booking) => Promise<void>
+  findById: (bookingId: string) => Promise<Booking | null>
 }

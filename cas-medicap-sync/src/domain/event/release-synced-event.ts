@@ -1,11 +1,11 @@
-import { EventBusMessage } from "../ports/EventBus";
-import { Release } from "../schema/Release";
-import { uniqueId } from "../service/unique-id";
+import { EventBusMessage } from '../ports/EventBus'
+import { Release } from '../schema/Release'
+import { uniqueId } from '../service/unique-id'
 
 export function releaseSyncedEvent(release: Release): EventBusMessage {
   return {
     eventId: uniqueId(),
-    eventType: "release-synced",
+    eventType: 'release-synced',
     timestamp: new Date().toISOString(),
     detail: {
       id: release.id,
@@ -15,7 +15,7 @@ export function releaseSyncedEvent(release: Release): EventBusMessage {
       serviceId: release.serviceId,
       isEnabled: release.isEnabled,
       createdAt: release.createdAt,
-      updatedAt: release.updatedAt,
-    },
-  };
+      updatedAt: release.updatedAt
+    }
+  }
 }

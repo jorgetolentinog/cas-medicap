@@ -1,21 +1,21 @@
-import { z } from "zod";
-import { APIGatewayEvent } from "aws-lambda";
-import { SyncBooking } from "@/domain/usecase/sync-booking/SyncBooking";
-import { localDate } from "@/domain/service/date";
-import { container } from "tsyringe";
+import { z } from 'zod'
+import { APIGatewayEvent } from 'aws-lambda'
+import { SyncBooking } from '@/domain/usecase/sync-booking/SyncBooking'
+import { localDate } from '@/domain/service/date'
+import { container } from 'tsyringe'
 
 export async function syncBookingAdapter(event: APIGatewayEvent) {
-  const body = bodyParser(event.body ?? "");
+  const body = bodyParser(event.body ?? '')
 
   if (!body.success) {
-    throw new Error("Invalid request body");
+    throw new Error('Invalid request body')
   }
 
   const bookingDate = localDate.parse(
-    body.data.data.fecha + " " + body.data.data.hora.padStart(5, "0"),
-    "DD/MM/YYYY HH:mm",
-    "YYYY-MM-DDTHH:mm:ss"
-  );
+    body.data.data.fecha + ' ' + body.data.data.hora.padStart(5, '0'),
+    'DD/MM/YYYY HH:mm',
+    'YYYY-MM-DDTHH:mm:ss'
+  )
 
   await container.resolve(SyncBooking).execute({
     id: body.data.data.indice,
@@ -27,18 +27,18 @@ export async function syncBookingAdapter(event: APIGatewayEvent) {
     patientId: body.data.data.ppnPaciente,
     date: bookingDate,
     blockDurationInMinutes: body.data.data.duracionBloques,
-    isEnabled: body.data.data.vigencia,
-  });
+    isEnabled: body.data.data.vigencia
+  })
 }
 
 function bodyParser(body: string) {
   const stringify = z
     .string()
     .or(z.number())
-    .transform((value) => value.toString());
+    .transform((value) => value.toString())
 
   const schema = z.object({
-    type: z.literal("RSV"),
+    type: z.literal('RSV'),
     data: z.object({
       indice: stringify,
       fecha: z.string(),
@@ -50,9 +50,9 @@ function bodyParser(body: string) {
       indiceCalendario: stringify,
       ppnPaciente: stringify,
       duracionBloques: z.number(),
-      vigencia: z.boolean(),
-    }),
-  });
+      vigencia: z.boolean()
+    })
+  })
 
-  return schema.safeParse(JSON.parse(body));
+  return schema.safeParse(JSON.parse(body))
 }
