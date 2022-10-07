@@ -23,11 +23,11 @@ export const syncCalendarAdapter = async (event: APIGatewayEvent) => {
     "YYYY-MM-DD"
   );
 
-  const minAge = Number(
+  const minAge = conditionalAgeParser(
     body.data.data.condicionesAtencionServicio.edadMinimaAtencion
   );
-  const maxAge = Number(
-    body.data.data.condicionesAtencionServicio.edadMinimaAtencion
+  const maxAge = conditionalAgeParser(
+    body.data.data.condicionesAtencionServicio.edadMaximaAtencion
   );
   const gender = genderParser(
     body.data.data.condicionesAtencionServicio.generoAtencion
@@ -69,6 +69,19 @@ function genderParser(gender: string) {
     return undefined;
   }
   return gender;
+}
+
+function conditionalAgeParser(age: string) {
+  let numAge = Number(age);
+  if (isNaN(numAge)) {
+    return undefined;
+  }
+
+  if (numAge < 0) {
+    return undefined;
+  }
+
+  return numAge;
 }
 
 function bodyParser(body: string) {
