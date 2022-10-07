@@ -92,7 +92,7 @@ export class DynamoDBCalendarRepository implements CalendarRepository {
       })
       .promise()
 
-    const item = result.Items != null && result.Items[0]
+    const item = result.Items?.[0]
     if (item == null) {
       return null
     }
