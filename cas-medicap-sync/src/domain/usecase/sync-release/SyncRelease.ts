@@ -1,8 +1,13 @@
 import { ReleaseRepository } from "@/domain/repository/ReleaseRepository";
+import { inject, injectable } from "tsyringe";
 import { SyncReleaseRequest } from "./SyncReleaseRequest";
 
+@injectable()
 export class SyncRelease {
-  constructor(private releaseRepository: ReleaseRepository) {}
+  constructor(
+    @inject("ReleaseRepository")
+    private releaseRepository: ReleaseRepository
+  ) {}
 
   async execute(request: SyncReleaseRequest): Promise<void> {
     let release = await this.releaseRepository.findById(request.id);

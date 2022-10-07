@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { APIGatewayEvent } from "aws-lambda";
 import { localDate } from "@/domain/service/date";
-import { container } from "@/infrastructure/injection";
 import { SyncPreBooking } from "@/domain/usecase/sync-pre-booking/SyncPreBooking";
+import { container } from "tsyringe";
 
 export const syncPreBookingAdapter = async (event: APIGatewayEvent) => {
   const body = bodyParser(event.body ?? "");

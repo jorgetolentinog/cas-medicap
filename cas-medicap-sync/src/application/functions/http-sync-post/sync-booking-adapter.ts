@@ -2,7 +2,7 @@ import { z } from "zod";
 import { APIGatewayEvent } from "aws-lambda";
 import { SyncBooking } from "@/domain/usecase/sync-booking/SyncBooking";
 import { localDate } from "@/domain/service/date";
-import { container } from "@/infrastructure/injection";
+import { container } from "tsyringe";
 
 export const syncBookingAdapter = async (event: APIGatewayEvent) => {
   const body = bodyParser(event.body ?? "");

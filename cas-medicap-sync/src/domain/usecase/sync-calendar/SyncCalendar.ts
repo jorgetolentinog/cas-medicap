@@ -1,8 +1,13 @@
 import { CalendarRepository } from "@/domain/repository/CalendarRepository";
+import { inject, injectable } from "tsyringe";
 import { SyncCalendarRequest } from "./SyncCalendarRequest";
 
+@injectable()
 export class SyncCalendar {
-  constructor(private calendarRepository: CalendarRepository) {}
+  constructor(
+    @inject("CalendarRepository")
+    private calendarRepository: CalendarRepository
+  ) {}
 
   async execute(request: SyncCalendarRequest): Promise<void> {
     let calendar = await this.calendarRepository.findById(request.id);

@@ -1,8 +1,13 @@
 import { ExceptionRepository } from "@/domain/repository/ExceptionRepository";
+import { inject, injectable } from "tsyringe";
 import { SyncExceptionRequest } from "./SyncExceptionRequest";
 
+@injectable()
 export class SyncException {
-  constructor(private exceptionRepository: ExceptionRepository) {}
+  constructor(
+    @inject("ExceptionRepository")
+    private exceptionRepository: ExceptionRepository
+  ) {}
 
   async execute(request: SyncExceptionRequest): Promise<void> {
     let exception = await this.exceptionRepository.findById(request.id);
