@@ -1,4 +1,4 @@
-import { CalendarRepository } from "../../repository/CalendarRepository";
+import { CalendarRepository } from "@/domain/repository/CalendarRepository";
 import { SyncCalendarRequest } from "./SyncCalendarRequest";
 
 export class SyncCalendar {

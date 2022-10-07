@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { httpHandler } from "../../shared/http-handler";
-import { container } from "../../../infrastructure/injection";
-import { SyncBooking } from "../../../domain/usecase/sync-booking/SyncBooking";
-import { localDate } from "../../../domain/service/date";
+import { httpHandler } from "@/application/shared/http-handler";
+import { SyncBooking } from "@/domain/usecase/sync-booking/SyncBooking";
+import { localDate } from "@/domain/service/date";
+import { container } from "@/infrastructure/injection";
 
 export const syncBookingHandler = httpHandler(async (event) => {
   const body = bodyParser(event.body ?? "");

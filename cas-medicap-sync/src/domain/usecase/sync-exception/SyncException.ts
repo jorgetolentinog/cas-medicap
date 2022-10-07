@@ -1,4 +1,4 @@
-import { ExceptionRepository } from "../../repository/ExceptionRepository";
+import { ExceptionRepository } from "@/domain/repository/ExceptionRepository";
 import { SyncExceptionRequest } from "./SyncExceptionRequest";
 
 export class SyncException {

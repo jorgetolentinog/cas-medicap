@@ -1,4 +1,4 @@
-import { ReleaseRepository } from "../../repository/ReleaseRepository";
+import { ReleaseRepository } from "@/domain/repository/ReleaseRepository";
 import { SyncReleaseRequest } from "./SyncReleaseRequest";
 
 export class SyncRelease {

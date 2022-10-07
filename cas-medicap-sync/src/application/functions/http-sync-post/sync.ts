@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { httpHandler } from "../../shared/http-handler";
+import { httpHandler } from "@/application/shared/http-handler";
 import { syncBookingHandler } from "./sync-booking";
 
 export const handler = httpHandler(async (event) => {

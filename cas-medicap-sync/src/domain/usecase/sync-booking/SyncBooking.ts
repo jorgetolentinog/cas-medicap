@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { BookingRepository } from "../../repository/BookingRepository";
+import { BookingRepository } from "@/domain/repository/BookingRepository";
 import { SyncBookingRequest } from "./SyncBookingRequest";
 
 @injectable()

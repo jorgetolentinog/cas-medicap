@@ -1,6 +1,6 @@
 import { injectable } from "tsyringe";
-import { BookingRepository } from "../../domain/repository/BookingRepository";
-import { Booking } from "../../domain/schema/Booking";
+import { BookingRepository } from "@/domain/repository/BookingRepository";
+import { Booking } from "@/domain/schema/Booking";
 
 @injectable()
 export class DynamoDBBookingRepository implements BookingRepository {

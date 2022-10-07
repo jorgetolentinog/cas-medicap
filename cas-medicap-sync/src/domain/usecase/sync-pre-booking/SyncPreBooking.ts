@@ -1,4 +1,4 @@
-import { PreBookingRepository } from "../../repository/PreBookingRepository";
+import { PreBookingRepository } from "@/domain/repository/PreBookingRepository";
 import { SyncPreBookingRequest } from "./SyncPreBookingRequest";
 
 export class SyncPreBooking {
