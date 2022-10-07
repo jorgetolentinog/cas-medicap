@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { httpHandler } from "@/application/shared/http-handler";
 import { syncBookingAdapter } from "./sync-booking-adapter";
+import { syncPreBookingAdapter } from "./sync-pre-booking-adapter";
 
 export const handler = httpHandler(async (event) => {
   const body = bodyParser(event.body ?? "");
@@ -9,14 +10,21 @@ export const handler = httpHandler(async (event) => {
     throw new Error("Invalid request body");
   }
 
-  if (body.data.type === "RSV") {
-    await syncBookingAdapter(event);
+  switch (body.data.type) {
+    case "RSV":
+      await syncBookingAdapter(event);
+      break;
+    case "PSV":
+      await syncPreBookingAdapter(event);
+      break;
+    default:
+      throw new Error("Invalid Type");
   }
 
   return {
     statusCode: 200,
     body: JSON.stringify({ message: "OK" }),
-  }
+  };
 });
 
 function bodyParser(body: string) {
