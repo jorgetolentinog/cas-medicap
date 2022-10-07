@@ -13,6 +13,7 @@
     "zod": "^3.19.1"
   },
   "devDependencies": {
+    "@nearst/serverless-dynalite": "^2.0.4",
     "@types/aws-lambda": "^8.10.106",
     "serverless": "^3.22.0",
     "serverless-offline": "^8.8.1",

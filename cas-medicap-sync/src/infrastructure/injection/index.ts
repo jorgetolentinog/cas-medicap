@@ -1,14 +1,14 @@
 import { container } from "tsyringe";
 import { BookingRepository } from "@/domain/repository/BookingRepository";
-import { DynamoDBBookingRepository } from "@/infrastructure/repository/DynamoDBBookingRepository";
 import { PreBookingRepository } from "@/domain/repository/PreBookingRepository";
-import { DynamoDBPreBookingRepository } from "@/infrastructure/repository/DynamoDBPreBookingRepository";
 import { ReleaseRepository } from "@/domain/repository/ReleaseRepository";
-import { DynamoDBReleaseRepository } from "@/infrastructure/repository/DynamoDBReleaseRepository";
 import { CalendarRepository } from "@/domain/repository/CalendarRepository";
-import { DynamoDBCalendarRepository } from "@/infrastructure/repository/DynamoDBCalendarRepository";
 import { ExceptionRepository } from "@/domain/repository/ExceptionRepository";
-import { DynamoDBExceptionRepository } from "@/infrastructure/repository/DynamoDBExceptionRepository";
+import { DynamoDBBookingRepository } from "@/infrastructure/repository/dynamodb/adapter/DynamoDBBookingRepository";
+import { DynamoDBPreBookingRepository } from "@/infrastructure/repository/dynamodb/adapter/DynamoDBPreBookingRepository";
+import { DynamoDBReleaseRepository } from "@/infrastructure/repository/dynamodb/adapter/DynamoDBReleaseRepository";
+import { DynamoDBCalendarRepository } from "@/infrastructure/repository/dynamodb/adapter/DynamoDBCalendarRepository";
+import { DynamoDBExceptionRepository } from "@/infrastructure/repository/dynamodb/adapter/DynamoDBExceptionRepository";
 
 container.register<BookingRepository>(
   "BookingRepository",
