@@ -1,12 +1,17 @@
 import { inject, injectable } from "tsyringe";
 import { BookingRepository } from "@/domain/repository/BookingRepository";
 import { SyncBookingRequest } from "./SyncBookingRequest";
+import { EventBus } from "@/domain/ports/EventBus";
+import { bookingSyncedEvent } from "@/domain/event/booking-synced-event";
 
 @injectable()
 export class SyncBooking {
   constructor(
     @inject("BookingRepository")
-    private bookingRepository: BookingRepository
+    private bookingRepository: BookingRepository,
+
+    @inject("EventBus")
+    private eventBus: EventBus
   ) {}
 
   async execute(request: SyncBookingRequest): Promise<void> {
@@ -43,5 +48,7 @@ export class SyncBooking {
     }
 
     console.log("event booking created");
+
+    this.eventBus.publish(bookingSyncedEvent(booking));
   }
 }

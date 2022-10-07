@@ -10,11 +10,13 @@
     "dayjs": "^1.11.5",
     "reflect-metadata": "^0.1.13",
     "tsyringe": "^4.7.0",
+    "uuid": "^9.0.0",
     "zod": "^3.19.1"
   },
   "devDependencies": {
     "@nearst/serverless-dynalite": "^2.0.4",
     "@types/aws-lambda": "^8.10.106",
+    "@types/uuid": "^8.3.4",
     "serverless": "^3.22.0",
     "serverless-offline": "^8.8.1",
     "serverless-webpack": "^5.10.0",
