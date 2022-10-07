@@ -38,7 +38,10 @@ container.register<ExceptionRepository>(
   DynamoDBExceptionRepository
 );
 
-// container.register<EventBus>("EventBus", MemoryEventBus);
-container.register<EventBus>("EventBus", EventBridgeEventBus);
+if (process.env.IS_OFFLINE) {
+  container.register<EventBus>("EventBus", MemoryEventBus);
+} else {
+  container.register<EventBus>("EventBus", EventBridgeEventBus);
+}
 
 export { container };
