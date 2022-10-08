@@ -45,7 +45,7 @@ custom:
 
 functions:
   httpSyncPost:
-    handler: ./src/application/functions/http-sync-post/sync.handler
+    handler: ./src/application/functions/http-sync-post/index.handler
     events:
       - http:
           path: /sync
