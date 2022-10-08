@@ -44,11 +44,10 @@ export class DynamoDBReleaseRepository implements ReleaseRepository {
     const expressionAttributeValues: Record<string, unknown> = {}
 
     for (const prop in attrs) {
+      const value = (attrs as Record<string, unknown>)[prop] ?? null;
       updateExpression += `#${prop} = :${prop},`
       expressionAttributeNames[`#${prop}`] = prop
-      expressionAttributeValues[`:${prop}`] = (
-        attrs as Record<string, unknown>
-      )[prop]
+      expressionAttributeValues[`:${prop}`] = value
     }
     updateExpression = updateExpression.slice(0, -1)
 
