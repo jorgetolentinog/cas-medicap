@@ -1,14 +1,14 @@
 import { injectable } from 'tsyringe'
 import { ExceptionRepository } from '@/domain/repository/ExceptionRepository'
 import { Exception } from '@/domain/schema/Exception'
-import { DynamoDB } from '../DynamoDB'
+import { DynamoDBDocument } from '@/infrastructure/aws/DynamoDBDocument'
 
 @injectable()
 export class DynamoDBExceptionRepository implements ExceptionRepository {
   private readonly _table =
     process.env.DYNAMODB_TABLE_EXCEPTION ?? 'ExceptionTable'
 
-  constructor(private readonly dynamodb: DynamoDB) {}
+  constructor(private readonly dynamodb: DynamoDBDocument) {}
 
   async create(exception: Exception): Promise<void> {
     await this.dynamodb.client

@@ -1,11 +1,12 @@
 import { EventBus, EventBusMessage } from '@/domain/ports/EventBus'
-import EventBridge from 'aws-sdk/clients/eventbridge'
+// import EventBridge from 'aws-sdk/clients/eventbridge'
+import { AWSType, AWS } from '@/infrastructure/aws'
 
 export class EventBridgeEventBus implements EventBus {
-  private readonly _eventBridge: EventBridge
+  private readonly _eventBridge: AWSType.EventBridge
 
   constructor() {
-    this._eventBridge = new EventBridge()
+    this._eventBridge = new AWS.EventBridge()
   }
 
   async publish(message: EventBusMessage): Promise<void> {

@@ -1,13 +1,13 @@
 import { injectable } from 'tsyringe'
 import { ReleaseRepository } from '@/domain/repository/ReleaseRepository'
 import { Release } from '@/domain/schema/Release'
-import { DynamoDB } from '../DynamoDB'
+import { DynamoDBDocument } from '@/infrastructure/aws/DynamoDBDocument'
 
 @injectable()
 export class DynamoDBReleaseRepository implements ReleaseRepository {
   private readonly _table = process.env.DYNAMODB_TABLE_RELEASE ?? 'ReleaseTable'
 
-  constructor(private readonly dynamodb: DynamoDB) {}
+  constructor(private readonly dynamodb: DynamoDBDocument) {}
 
   async create(release: Release): Promise<void> {
     await this.dynamodb.client

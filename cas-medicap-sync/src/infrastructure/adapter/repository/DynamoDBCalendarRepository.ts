@@ -1,14 +1,14 @@
 import { injectable } from 'tsyringe'
 import { CalendarRepository } from '@/domain/repository/CalendarRepository'
 import { Calendar } from '@/domain/schema/Calendar'
-import { DynamoDB } from '../DynamoDB'
+import { DynamoDBDocument } from '@/infrastructure/aws/DynamoDBDocument'
 
 @injectable()
 export class DynamoDBCalendarRepository implements CalendarRepository {
   private readonly _table =
     process.env.DYNAMODB_TABLE_CALENDAR ?? 'CalendarTable'
 
-  constructor(private readonly dynamodb: DynamoDB) {}
+  constructor(private readonly dynamodb: DynamoDBDocument) {}
 
   async create(calendar: Calendar): Promise<void> {
     await this.dynamodb.client
