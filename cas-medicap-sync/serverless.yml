@@ -20,6 +20,8 @@ provider:
   apiGateway:
     restApiId: ${self:custom.cas-medicap.ApiGatewayRestApiId}
     restApiRootResourceId: ${self:custom.cas-medicap.ApiGatewayRestApiRootResourceId}
+  tracing:
+    lambda: true
   iam:
     role:
       statements:
