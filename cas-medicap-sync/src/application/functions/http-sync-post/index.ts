@@ -1,12 +1,12 @@
 import { z } from 'zod'
-import { httpHandler } from '@/application/shared/http-handler'
+import { apiGatewayHandler } from '@/application/shared/api-gateway-handler'
 import { syncBookingAdapter } from './sync-booking-adapter'
 import { syncPreBookingAdapter } from './sync-pre-booking-adapter'
 import { syncReleaseAdapter } from './sync-release-adapter'
 import { syncCalendarAdapter } from './sync-calendar-adapter'
 import { syncExceptionAdapter } from './sync-exception-adapter'
 
-export const handler = httpHandler(async (event) => {
+export const handler = apiGatewayHandler(async (event) => {
   const body = bodyParser(event.body ?? '')
 
   if (!body.success) {
