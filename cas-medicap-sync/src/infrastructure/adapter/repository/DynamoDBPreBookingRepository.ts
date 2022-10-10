@@ -25,9 +25,14 @@ export class DynamoDBPreBookingRepository implements PreBookingRepository {
           blockDurationInMinutes: preBooking.blockDurationInMinutes,
           isEnabled: preBooking.isEnabled,
           createdAt: preBooking.createdAt,
-          updatedAt: preBooking.updatedAt
+          updatedAt: preBooking.updatedAt,
+          // Interno
+          _pk: preBooking.id
         },
-        ConditionExpression: 'attribute_not_exists(id)'
+        ExpressionAttributeNames: {
+          '#_pk': '_pk'
+        },
+        ConditionExpression: 'attribute_not_exists(#_pk)'
       })
       .promise()
   }
@@ -47,11 +52,11 @@ export class DynamoDBPreBookingRepository implements PreBookingRepository {
     }
 
     let updateExpression = 'set '
-    const expressionAttributeNames: Record<string, string> = {}
+    const expressionAttributeNames: Record<string, string> = { '#_pk': '_pk' }
     const expressionAttributeValues: Record<string, unknown> = {}
 
     for (const prop in attrs) {
-      const value = (attrs as Record<string, unknown>)[prop] ?? null;
+      const value = (attrs as Record<string, unknown>)[prop] ?? null
       updateExpression += `#${prop} = :${prop},`
       expressionAttributeNames[`#${prop}`] = prop
       expressionAttributeValues[`:${prop}`] = value
@@ -62,10 +67,10 @@ export class DynamoDBPreBookingRepository implements PreBookingRepository {
       .update({
         TableName: this._table,
         Key: {
-          id: preBooking.id
+          _pk: preBooking.id
         },
         UpdateExpression: updateExpression,
-        ConditionExpression: 'attribute_exists(id)',
+        ConditionExpression: 'attribute_exists(#_pk)',
         ExpressionAttributeNames: expressionAttributeNames,
         ExpressionAttributeValues: expressionAttributeValues
       })
@@ -76,10 +81,10 @@ export class DynamoDBPreBookingRepository implements PreBookingRepository {
     const result = await this.dynamodb.client
       .query({
         TableName: this._table,
-        KeyConditionExpression: '#id = :id',
-        ExpressionAttributeNames: { '#id': 'id' },
+        KeyConditionExpression: '#_pk = :_pk',
+        ExpressionAttributeNames: { '#_pk': '_pk' },
         ExpressionAttributeValues: {
-          ':id': preBookingId
+          ':_pk': preBookingId
         }
       })
       .promise()

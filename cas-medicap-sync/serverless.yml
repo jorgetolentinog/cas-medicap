@@ -60,10 +60,10 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: _pk
             AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: _pk
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.DYNAMODB_TABLE_CALENDAR}
@@ -72,10 +72,10 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: _pk
             AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: _pk
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.DYNAMODB_TABLE_EXCEPTION}
@@ -84,10 +84,10 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: _pk
             AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: _pk
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.DYNAMODB_TABLE_RELEASE}
@@ -96,10 +96,10 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: _pk
             AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: _pk
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.DYNAMODB_TABLE_BOOKING}
@@ -108,10 +108,10 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: _pk
             AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: _pk
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.DYNAMODB_TABLE_PRE_BOOKING}

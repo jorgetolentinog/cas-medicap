@@ -29,9 +29,14 @@ export class DynamoDBCalendarRepository implements CalendarRepository {
           conditionsOfService: calendar.conditionsOfService,
           days: calendar.days,
           createdAt: calendar.createdAt,
-          updatedAt: calendar.updatedAt
+          updatedAt: calendar.updatedAt,
+          // Interno
+          _pk: calendar.id
         },
-        ConditionExpression: 'attribute_not_exists(id)'
+        ExpressionAttributeNames: {
+          '#_pk': '_pk'
+        },
+        ConditionExpression: 'attribute_not_exists(#_pk)'
       })
       .promise()
   }
@@ -55,10 +60,10 @@ export class DynamoDBCalendarRepository implements CalendarRepository {
     }
 
     let updateExpression = 'set '
-    const expressionAttributeNames: Record<string, string> = {}
+    const expressionAttributeNames: Record<string, string> = { '#_pk': '_pk' }
     const expressionAttributeValues: Record<string, unknown> = {}
     for (const prop in attrs) {
-      const value = (attrs as Record<string, unknown>)[prop] ?? null;
+      const value = (attrs as Record<string, unknown>)[prop] ?? null
       updateExpression += `#${prop} = :${prop},`
       expressionAttributeNames[`#${prop}`] = prop
       expressionAttributeValues[`:${prop}`] = value
@@ -69,10 +74,10 @@ export class DynamoDBCalendarRepository implements CalendarRepository {
       .update({
         TableName: this._table,
         Key: {
-          id: calendar.id
+          _pk: calendar.id
         },
         UpdateExpression: updateExpression,
-        ConditionExpression: 'attribute_exists(id)',
+        ConditionExpression: 'attribute_exists(#_pk)',
         ExpressionAttributeNames: expressionAttributeNames,
         ExpressionAttributeValues: expressionAttributeValues
       })
@@ -83,10 +88,10 @@ export class DynamoDBCalendarRepository implements CalendarRepository {
     const result = await this.dynamodb.client
       .query({
         TableName: this._table,
-        KeyConditionExpression: '#id = :id',
-        ExpressionAttributeNames: { '#id': 'id' },
+        KeyConditionExpression: '#_pk = :_pk',
+        ExpressionAttributeNames: { '#_pk': '_pk' },
         ExpressionAttributeValues: {
-          ':id': calendarId
+          ':_pk': calendarId
         }
       })
       .promise()

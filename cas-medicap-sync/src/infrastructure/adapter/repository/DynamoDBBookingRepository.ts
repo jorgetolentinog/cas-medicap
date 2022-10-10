@@ -25,9 +25,14 @@ export class DynamoDBBookingRepository implements BookingRepository {
           blockDurationInMinutes: booking.blockDurationInMinutes,
           isEnabled: booking.isEnabled,
           createdAt: booking.createdAt,
-          updatedAt: booking.updatedAt
+          updatedAt: booking.updatedAt,
+          // Interno
+          _pk: booking.id
         },
-        ConditionExpression: 'attribute_not_exists(id)'
+        ExpressionAttributeNames: {
+          '#_pk': '_pk'
+        },
+        ConditionExpression: 'attribute_not_exists(#_pk)'
       })
       .promise()
   }
@@ -48,10 +53,10 @@ export class DynamoDBBookingRepository implements BookingRepository {
     }
 
     let updateExpression = 'set '
-    const expressionAttributeNames: Record<string, string> = {}
+    const expressionAttributeNames: Record<string, string> = { '#_pk': '_pk' }
     const expressionAttributeValues: Record<string, unknown> = {}
     for (const prop in attrs) {
-      const value = (attrs as Record<string, unknown>)[prop] ?? null;
+      const value = (attrs as Record<string, unknown>)[prop] ?? null
       updateExpression += ` #${prop} = :${prop},`
       expressionAttributeNames[`#${prop}`] = prop
       expressionAttributeValues[`:${prop}`] = value
@@ -62,10 +67,10 @@ export class DynamoDBBookingRepository implements BookingRepository {
       .update({
         TableName: this._table,
         Key: {
-          id: booking.id
+          _pk: booking.id
         },
         UpdateExpression: updateExpression,
-        ConditionExpression: 'attribute_exists(id)',
+        ConditionExpression: 'attribute_exists(#_pk)',
         ExpressionAttributeNames: expressionAttributeNames,
         ExpressionAttributeValues: expressionAttributeValues
       })
@@ -76,10 +81,10 @@ export class DynamoDBBookingRepository implements BookingRepository {
     const result = await this.dynamodb.client
       .query({
         TableName: this._table,
-        KeyConditionExpression: '#id = :id',
-        ExpressionAttributeNames: { '#id': 'id' },
+        KeyConditionExpression: '#_pk = :_pk',
+        ExpressionAttributeNames: { '#_pk': '_pk' },
         ExpressionAttributeValues: {
-          ':id': bookingId
+          ':_pk': bookingId
         }
       })
       .promise()

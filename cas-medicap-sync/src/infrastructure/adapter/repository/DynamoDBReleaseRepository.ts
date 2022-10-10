@@ -21,9 +21,14 @@ export class DynamoDBReleaseRepository implements ReleaseRepository {
           serviceId: release.serviceId,
           isEnabled: release.isEnabled,
           createdAt: release.createdAt,
-          updatedAt: release.updatedAt
+          updatedAt: release.updatedAt,
+          // Interno
+          _pk: release.id
         },
-        ConditionExpression: 'attribute_not_exists(id)'
+        ExpressionAttributeNames: {
+          '#_pk': '_pk'
+        },
+        ConditionExpression: 'attribute_not_exists(#_pk)'
       })
       .promise()
   }
@@ -40,11 +45,11 @@ export class DynamoDBReleaseRepository implements ReleaseRepository {
     }
 
     let updateExpression = 'set '
-    const expressionAttributeNames: Record<string, string> = {}
+    const expressionAttributeNames: Record<string, string> = { '#_pk': '_pk' }
     const expressionAttributeValues: Record<string, unknown> = {}
 
     for (const prop in attrs) {
-      const value = (attrs as Record<string, unknown>)[prop] ?? null;
+      const value = (attrs as Record<string, unknown>)[prop] ?? null
       updateExpression += `#${prop} = :${prop},`
       expressionAttributeNames[`#${prop}`] = prop
       expressionAttributeValues[`:${prop}`] = value
@@ -55,10 +60,10 @@ export class DynamoDBReleaseRepository implements ReleaseRepository {
       .update({
         TableName: this._table,
         Key: {
-          id: release.id
+          _pk: release.id
         },
         UpdateExpression: updateExpression,
-        ConditionExpression: 'attribute_exists(id)',
+        ConditionExpression: 'attribute_exists(#_pk)',
         ExpressionAttributeNames: expressionAttributeNames,
         ExpressionAttributeValues: expressionAttributeValues
       })
@@ -69,10 +74,10 @@ export class DynamoDBReleaseRepository implements ReleaseRepository {
     const result = await this.dynamodb.client
       .query({
         TableName: this._table,
-        KeyConditionExpression: '#id = :id',
-        ExpressionAttributeNames: { '#id': 'id' },
+        KeyConditionExpression: '#_pk = :_pk',
+        ExpressionAttributeNames: { '#_pk': '_pk' },
         ExpressionAttributeValues: {
-          ':id': releaseId
+          ':_pk': releaseId
         }
       })
       .promise()
