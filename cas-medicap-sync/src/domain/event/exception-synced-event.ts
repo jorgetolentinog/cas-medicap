@@ -7,7 +7,7 @@ export function exceptionSyncedEvent(exception: Exception): EventBusMessage {
     eventId: uniqueId(),
     eventType: 'exception-synced',
     timestamp: new Date().toISOString(),
-    detail: {
+    body: {
       id: exception.id,
       startDate: exception.startDate,
       endDate: exception.endDate,

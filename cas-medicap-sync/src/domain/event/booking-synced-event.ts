@@ -7,7 +7,7 @@ export function bookingSyncedEvent(booking: Booking): EventBusMessage {
     eventId: uniqueId(),
     eventType: 'booking-synced',
     timestamp: new Date().toISOString(),
-    detail: {
+    body: {
       id: booking.id,
       date: booking.date,
       companyId: booking.companyId,

@@ -7,7 +7,7 @@ export function releaseSyncedEvent(release: Release): EventBusMessage {
     eventId: uniqueId(),
     eventType: 'release-synced',
     timestamp: new Date().toISOString(),
-    detail: {
+    body: {
       id: release.id,
       date: release.date,
       blockDurationInMinutes: release.blockDurationInMinutes,

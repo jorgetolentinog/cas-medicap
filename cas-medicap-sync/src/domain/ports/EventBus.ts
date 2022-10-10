@@ -6,5 +6,5 @@ export interface EventBusMessage {
   eventId: string
   eventType: string
   timestamp: string
-  detail: Record<string, unknown>
+  body: Record<string, unknown>
 }

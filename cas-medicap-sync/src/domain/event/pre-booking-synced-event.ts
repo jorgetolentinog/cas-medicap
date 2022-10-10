@@ -7,7 +7,7 @@ export function preBookingSyncedEvent(preBooking: PreBooking): EventBusMessage {
     eventId: uniqueId(),
     eventType: 'pre-booking-synced',
     timestamp: new Date().toISOString(),
-    detail: {
+    body: {
       id: preBooking.id,
       date: preBooking.date,
       companyId: preBooking.companyId,

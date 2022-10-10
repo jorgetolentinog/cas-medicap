@@ -7,7 +7,7 @@ export function calendarSyncedEvent(calendar: Calendar): EventBusMessage {
     eventId: uniqueId(),
     eventType: 'calendar-synced',
     timestamp: new Date().toISOString(),
-    detail: {
+    body: {
       id: calendar.id,
       startDate: calendar.startDate,
       endDate: calendar.endDate,
