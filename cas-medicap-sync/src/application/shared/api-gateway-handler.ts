@@ -19,10 +19,8 @@ export const apiGatewayHandler = (handler: Handler): Handler => {
     return {
       ...result,
       headers: {
-        // Allow CORS
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
-        // Additional headers
         ...result.headers
       }
     }
