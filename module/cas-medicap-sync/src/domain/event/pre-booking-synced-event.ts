@@ -5,7 +5,7 @@ import { uniqueId } from '../service/unique-id'
 export function preBookingSyncedEvent(preBooking: PreBooking): EventBusMessage {
   return {
     eventId: uniqueId(),
-    eventType: 'pre-booking-synced',
+    eventType: 'pre-booking.synced',
     timestamp: new Date().toISOString(),
     body: {
       id: preBooking.id,

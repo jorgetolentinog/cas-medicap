@@ -1,0 +1,79 @@
+asyncapi: 2.4.0
+info:
+  title: CAS-MEDICAP
+  version: '1.0.0'
+
+defaultContentType: application/json
+
+channels:
+  medicap-sync.pre-booking.synced:
+    subscribe:
+      message:
+        $ref: '#/components/messages/PreBookingSynced'
+
+  medicap-sync.booking.synced:
+    subscribe:
+      message:
+        $ref: '#/components/messages/BookingSynced'
+
+  medicap-sync.calendar.synced:
+    subscribe:
+      message:
+        $ref: '#/components/messages/CalendarSynced'
+
+  medicap-sync.exception.synced:
+    subscribe:
+      message:
+        $ref: '#/components/messages/ExceptionSynced'
+
+  medicap-sync.release.synced:
+    subscribe:
+      message:
+        $ref: '#/components/messages/ReleaseSynced'
+
+components:
+  messages:
+    PreBookingSynced:
+      name: PreBookingSynced
+      payload:
+        type: object
+        properties:
+          id:
+            type: string
+            example: '838'
+          dateTime:
+            type: string
+            example: '2020-09-15T14:00:00'
+          blockDurationInMinutes:
+            type: number
+            example: 30
+          professionalId:
+            type: string
+            example: '2549'
+          serviceId:
+            type: string
+            eaxmple: '92'
+          isEnabled:
+            type: boolean
+            example: true
+          createdAt:
+            type: string
+            example: '2022-09-09T03:28:27.517Z'
+          updatedAt:
+            type: string
+            example: '2022-09-09T03:29:28.199Z'
+          version:
+            type: number
+            example: 3
+
+    BookingSynced:
+      name: BookingSynced
+
+    CalendarSynced:
+      name: CalendarSynced
+
+    ExceptionSynced:
+      name: ExceptionSynced
+
+    ReleaseSynced:
+      name: ReleaseSynced

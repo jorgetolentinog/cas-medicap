@@ -5,7 +5,7 @@ import { uniqueId } from '../service/unique-id'
 export function bookingSyncedEvent(booking: Booking): EventBusMessage {
   return {
     eventId: uniqueId(),
-    eventType: 'booking-synced',
+    eventType: 'booking.synced',
     timestamp: new Date().toISOString(),
     body: {
       id: booking.id,

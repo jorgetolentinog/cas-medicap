@@ -5,7 +5,7 @@ import { uniqueId } from '../service/unique-id'
 export function calendarSyncedEvent(calendar: Calendar): EventBusMessage {
   return {
     eventId: uniqueId(),
-    eventType: 'calendar-synced',
+    eventType: 'calendar.synced',
     timestamp: new Date().toISOString(),
     body: {
       id: calendar.id,
