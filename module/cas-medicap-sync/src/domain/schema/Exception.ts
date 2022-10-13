@@ -11,7 +11,7 @@ export interface Exception {
   weekOfMonth?: number
   dayOfWeek?: number
   days: Array<{
-    dayOfWeek: number
+    dayOfWeek?: number
     blocks: Array<{
       startTime: string
       endTime: string

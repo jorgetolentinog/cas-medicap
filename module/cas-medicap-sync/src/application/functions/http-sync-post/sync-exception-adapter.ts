@@ -37,7 +37,7 @@ export async function syncExceptionAdapter(event: APIGatewayEvent) {
     dayOfWeek: body.data.data.diaSemana ?? undefined,
     days: body.data.data.dias.map((dia) => {
       return {
-        dayOfWeek: Number(dia.diaSemana),
+        dayOfWeek: dia.diaSemana != null ? Number(dia.diaSemana) : undefined,
         blocks: dia.bloques.map((bloque) => {
           return {
             startTime: bloque[0].padStart(5, '0') + ':00',
@@ -81,7 +81,7 @@ function bodyParser(body: string) {
       numeroSemana: z.number().nullable(),
       dias: z.array(
         z.object({
-          diaSemana: z.string(),
+          diaSemana: z.string().nullable(),
           bloques: z.array(z.array(z.string()))
         })
       )
