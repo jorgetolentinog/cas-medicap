@@ -5,8 +5,7 @@ import { DynamoDBDocument } from '@/infrastructure/aws/DynamoDBDocument'
 
 @injectable()
 export class DynamoDBPreBookingRepository implements PreBookingRepository {
-  private readonly _table =
-    process.env.DYNAMODB_TABLE_PRE_BOOKING ?? 'PreBookingTable'
+  private readonly _table = process.env.DYNAMODB_TABLE_MESSAGE ?? 'MessageTable'
 
   constructor(private readonly dynamodb: DynamoDBDocument) {}
 
@@ -27,7 +26,7 @@ export class DynamoDBPreBookingRepository implements PreBookingRepository {
           createdAt: preBooking.createdAt,
           updatedAt: preBooking.updatedAt,
           // Interno
-          _pk: preBooking.id
+          _pk: `pre-booking#${preBooking.id}`
         },
         ExpressionAttributeNames: {
           '#_pk': '_pk'
@@ -67,7 +66,7 @@ export class DynamoDBPreBookingRepository implements PreBookingRepository {
       .update({
         TableName: this._table,
         Key: {
-          _pk: preBooking.id
+          _pk: `pre-booking#${preBooking.id}`
         },
         UpdateExpression: updateExpression,
         ConditionExpression: 'attribute_exists(#_pk)',
@@ -84,7 +83,7 @@ export class DynamoDBPreBookingRepository implements PreBookingRepository {
         KeyConditionExpression: '#_pk = :_pk',
         ExpressionAttributeNames: { '#_pk': '_pk' },
         ExpressionAttributeValues: {
-          ':_pk': preBookingId
+          ':_pk': `pre-booking#${preBookingId}`
         }
       })
       .promise()

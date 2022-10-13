@@ -5,7 +5,7 @@ import { DynamoDBDocument } from '@/infrastructure/aws/DynamoDBDocument'
 
 @injectable()
 export class DynamoDBReleaseRepository implements ReleaseRepository {
-  private readonly _table = process.env.DYNAMODB_TABLE_RELEASE ?? 'ReleaseTable'
+  private readonly _table = process.env.DYNAMODB_TABLE_MESSAGE ?? 'MessageTable'
 
   constructor(private readonly dynamodb: DynamoDBDocument) {}
 
@@ -23,7 +23,7 @@ export class DynamoDBReleaseRepository implements ReleaseRepository {
           createdAt: release.createdAt,
           updatedAt: release.updatedAt,
           // Interno
-          _pk: release.id
+          _pk: `release#${release.id}`
         },
         ExpressionAttributeNames: {
           '#_pk': '_pk'
@@ -60,7 +60,7 @@ export class DynamoDBReleaseRepository implements ReleaseRepository {
       .update({
         TableName: this._table,
         Key: {
-          _pk: release.id
+          _pk: `release#${release.id}`
         },
         UpdateExpression: updateExpression,
         ConditionExpression: 'attribute_exists(#_pk)',
@@ -77,7 +77,7 @@ export class DynamoDBReleaseRepository implements ReleaseRepository {
         KeyConditionExpression: '#_pk = :_pk',
         ExpressionAttributeNames: { '#_pk': '_pk' },
         ExpressionAttributeValues: {
-          ':_pk': releaseId
+          ':_pk': `release#${releaseId}`
         }
       })
       .promise()

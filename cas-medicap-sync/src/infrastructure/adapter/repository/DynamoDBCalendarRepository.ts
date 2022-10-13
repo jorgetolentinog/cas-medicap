@@ -5,8 +5,7 @@ import { DynamoDBDocument } from '@/infrastructure/aws/DynamoDBDocument'
 
 @injectable()
 export class DynamoDBCalendarRepository implements CalendarRepository {
-  private readonly _table =
-    process.env.DYNAMODB_TABLE_CALENDAR ?? 'CalendarTable'
+  private readonly _table = process.env.DYNAMODB_TABLE_MESSAGE ?? 'MessageTable'
 
   constructor(private readonly dynamodb: DynamoDBDocument) {}
 
@@ -31,7 +30,7 @@ export class DynamoDBCalendarRepository implements CalendarRepository {
           createdAt: calendar.createdAt,
           updatedAt: calendar.updatedAt,
           // Interno
-          _pk: calendar.id
+          _pk: `calendar#${calendar.id}`
         },
         ExpressionAttributeNames: {
           '#_pk': '_pk'
@@ -74,7 +73,7 @@ export class DynamoDBCalendarRepository implements CalendarRepository {
       .update({
         TableName: this._table,
         Key: {
-          _pk: calendar.id
+          _pk: `calendar#${calendar.id}`
         },
         UpdateExpression: updateExpression,
         ConditionExpression: 'attribute_exists(#_pk)',
@@ -91,7 +90,7 @@ export class DynamoDBCalendarRepository implements CalendarRepository {
         KeyConditionExpression: '#_pk = :_pk',
         ExpressionAttributeNames: { '#_pk': '_pk' },
         ExpressionAttributeValues: {
-          ':_pk': calendarId
+          ':_pk': `calendar#${calendarId}`
         }
       })
       .promise()

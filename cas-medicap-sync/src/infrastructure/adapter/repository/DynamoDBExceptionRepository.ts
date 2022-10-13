@@ -5,8 +5,7 @@ import { DynamoDBDocument } from '@/infrastructure/aws/DynamoDBDocument'
 
 @injectable()
 export class DynamoDBExceptionRepository implements ExceptionRepository {
-  private readonly _table =
-    process.env.DYNAMODB_TABLE_EXCEPTION ?? 'ExceptionTable'
+  private readonly _table = process.env.DYNAMODB_TABLE_MESSAGE ?? 'MessageTable'
 
   constructor(private readonly dynamodb: DynamoDBDocument) {}
 
@@ -30,7 +29,7 @@ export class DynamoDBExceptionRepository implements ExceptionRepository {
           createdAt: exception.createdAt,
           updatedAt: exception.updatedAt,
           // Interno
-          _pk: exception.id
+          _pk: `exception#${exception.id}`
         },
         ExpressionAttributeNames: {
           '#_pk': '_pk'
@@ -72,7 +71,7 @@ export class DynamoDBExceptionRepository implements ExceptionRepository {
       .update({
         TableName: this._table,
         Key: {
-          _pk: exception.id
+          _pk: `exception#${exception.id}`
         },
         UpdateExpression: updateExpression,
         ConditionExpression: 'attribute_exists(#_pk)',
@@ -89,7 +88,7 @@ export class DynamoDBExceptionRepository implements ExceptionRepository {
         KeyConditionExpression: '#_pk = :_pk',
         ExpressionAttributeNames: { '#_pk': '_pk' },
         ExpressionAttributeValues: {
-          ':_pk': exceptionId
+          ':_pk': `exception#${exceptionId}`
         }
       })
       .promise()
