@@ -74,12 +74,78 @@ components:
 
     BookingSynced:
       name: BookingSynced
+      payload:
+        type: object
+        properties:
+          id:
+            type: string
+            example: '838'
+          date:
+            type: string
+            example: '2020-09-15T14:00:00'
+          companyId:
+            type: string
+            example: '02'
+          officeId:
+            type: string
+            example: '11'
+          serviceId:
+            type: string
+            example: '265'
+          professionalId:
+            type: string
+            example: '2549'
+          patientId:
+            type: string
+            example: '111'
+          calendarId:
+            type: string
+            example: '111'
+          blockDurationInMinutes:
+            type: number
+            example: 30
+          isEnabled:
+            type: boolean
+            example: true
+          createdAt:
+            type: string
+            example: '2022-09-09T03:28:27.517Z'
+          updatedAt:
+            type: string
+            example: '2022-09-09T03:29:28.199Z'
+
+    ReleaseSynced:
+      name: ReleaseSynced
+      payload:
+        type: object
+        properties:
+          id:
+            type: string
+            example: '838'
+          date:
+            type: string
+            example: '2020-09-15T14:00:00'
+          blockDurationInMinutes:
+            type: number
+            example: 30
+          professionalId:
+            type: string
+            example: '2549'
+          serviceId:
+            type: string
+            example: '265'
+          isEnabled:
+            type: boolean
+            example: true
+          createdAt:
+            type: string
+            example: '2022-09-09T03:28:27.517Z'
+          updatedAt:
+            type: string
+            example: '2022-09-09T03:29:28.199Z'
 
     CalendarSynced:
       name: CalendarSynced
 
     ExceptionSynced:
       name: ExceptionSynced
-
-    ReleaseSynced:
-      name: ReleaseSynced
