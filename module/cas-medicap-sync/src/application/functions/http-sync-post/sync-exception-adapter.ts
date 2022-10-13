@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { APIGatewayEvent } from 'aws-lambda'
-import { localDate } from '@/domain/service/date'
 import { container } from 'tsyringe'
+import { localDate } from '@/domain/service/date'
 import { SyncException } from '@/domain/usecase/sync-exception/SyncException'
 
 export async function syncExceptionAdapter(event: APIGatewayEvent) {
