@@ -1,32 +1,32 @@
 asyncapi: 2.4.0
 info:
-  title: CAS-MEDICAP
-  version: '1.0.0'
+  title: cas-medicap
+  version: '0.0.0'
 
 defaultContentType: application/json
 
 channels:
-  medicap-sync.pre-booking.synced:
+  cas-medicap-sync.pre-booking.synced:
     subscribe:
       message:
         $ref: '#/components/messages/PreBookingSynced'
 
-  medicap-sync.booking.synced:
+  cas-medicap-sync.booking.synced:
     subscribe:
       message:
         $ref: '#/components/messages/BookingSynced'
 
-  medicap-sync.calendar.synced:
+  cas-medicap-sync.calendar.synced:
     subscribe:
       message:
         $ref: '#/components/messages/CalendarSynced'
 
-  medicap-sync.exception.synced:
+  cas-medicap-sync.exception.synced:
     subscribe:
       message:
         $ref: '#/components/messages/ExceptionSynced'
 
-  medicap-sync.release.synced:
+  cas-medicap-sync.release.synced:
     subscribe:
       message:
         $ref: '#/components/messages/ReleaseSynced'
@@ -41,18 +41,27 @@ components:
           id:
             type: string
             example: '838'
-          dateTime:
+          date:
             type: string
             example: '2020-09-15T14:00:00'
-          blockDurationInMinutes:
-            type: number
-            example: 30
+          companyId:
+            type: string
+            example: '02'
+          officeId:
+            type: string
+            example: '11'
+          serviceId:
+            type: string
+            example: '265'
           professionalId:
             type: string
             example: '2549'
-          serviceId:
+          calendarId:
             type: string
-            eaxmple: '92'
+            example: '111'
+          blockDurationInMinutes:
+            type: number
+            example: 30
           isEnabled:
             type: boolean
             example: true
@@ -62,9 +71,6 @@ components:
           updatedAt:
             type: string
             example: '2022-09-09T03:29:28.199Z'
-          version:
-            type: number
-            example: 3
 
     BookingSynced:
       name: BookingSynced

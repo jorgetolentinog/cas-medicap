@@ -1,11 +1,10 @@
 openapi: 3.0.0
 servers:
-  - url: http://localhost:3000/local
   - url: http://localhost:3000/dev
   - url: https://e4r8k3c1p3.execute-api.us-east-1.amazonaws.com/dev
 info:
-  version: '1.0.0'
-  title: CAS Medicap Sync
+  version: '0.0.0'
+  title: cas-medicap
 tags:
   - name: sync
     description: sincronizador

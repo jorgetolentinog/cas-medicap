@@ -1,5 +1,4 @@
 import { EventBus, EventBusMessage } from '@/domain/ports/EventBus'
-// import EventBridge from 'aws-sdk/clients/eventbridge'
 import { AWSType, AWS } from '@/infrastructure/aws'
 
 export class EventBridgeEventBus implements EventBus {
